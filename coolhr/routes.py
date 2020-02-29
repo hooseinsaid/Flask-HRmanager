@@ -308,6 +308,9 @@ def trainings_deets(company_username):
                         training.subscribers.append(employee)
                         db.session.commit()
                         flash("You've successfully added {} to {}".format(employee.employee_name, training.training_name))
+                    else:
+                        flash("{} is already subscribed to {}".format(employee.employee_name, training.training_name))
+                        return redirect(url_for('trainings_deets', company_username=company_username, v=training.training_name))
                 else:
                     flash("This training has been marked as Completed")
             else:
@@ -321,6 +324,9 @@ def trainings_deets(company_username):
                         training.subscribers.remove(employee)
                         db.session.commit()
                         flash("You've successfully removed {} from {}".format(employee.employee_name, training.training_name))
+                    else:
+                        flash("{} is already unsubscribed from {}".format(employee.employee_name, training.training_name))
+                        return redirect(url_for('trainings_deets', company_username=company_username, v=training.training_name))
                 else:
                     flash("This training has been marked as Completed")
             else:
@@ -340,6 +346,9 @@ def training_subscription(company_username):
                 trainings.subscribers.append(employee)
                 db.session.commit()
                 flash("You've been subscribed to {}".format(trainings.training_name))
+            else:
+                flash("You're already subscribed to {}".format(trainings.training_name))
+                return redirect(url_for('training_subscription', company_username=company_username))
         else:
             flash("This training is no longer available for subscription")
     elif request.form.get("unsubscribe"):
@@ -349,6 +358,9 @@ def training_subscription(company_username):
                 trainings.subscribers.remove(employee)
                 db.session.commit()
                 flash("You've been unsubscribed from {}".format(trainings.training_name))
+            else:
+                flash("You're already unsubscribed from {}".format(trainings.training_name))
+                return redirect(url_for('training_subscription', company_username=company_username))
         else:
             flash("This training has been completed or is no longer available")
     return render_template('training_subscribe.html', employee=employee, training_available=training_available, company_username=company_username)
