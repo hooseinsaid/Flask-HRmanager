@@ -1,1 +1,5 @@
 coolhr/database.db
+/venv
+/.vscode
+/__pycache__
+venv/Lib/__pycache__/_bootlocale.cpython-38.pyc
