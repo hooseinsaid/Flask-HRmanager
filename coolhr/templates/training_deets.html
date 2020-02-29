@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+
+{% block content %}
+    {% if training.training_status == True %}
+    <h1>Edit Training - {{ training.training_name }}</h1>
+    {% elif training.training_status == False %}
+    <h1>Training {{ training.training_name }} has been Completed. You can't edit it no more</h1>
+    {% endif %}
+    <form action="" method="post" novalidate>
+        {{ form.hidden_tag() }}
+        {% if training.training_status == True %}
+        <p>
+            {{ form.training_name.label }}<br>
+            {{ form.training_name(size=32) }}<br>
+            {% for error in form.training_name.errors %}
+            <span style="color: red;">{{ error }}</span>
+            {% endfor %}
+        </p>
+        <p>
+            {{ form.training_description.label }}<br>
+            {{ form.training_description(cols=32, rows=4, style='resize:none') }}<br>
+            {% for error in form.training_description.errors %}
+            <span style="color: red;">{{ error }}</span>
+            {% endfor %}
+        </p>
+        <p>{{ form.training_submit() }}</p>
+        {% endif %}
+    </form>
+
+    <h1>Add/Remove Employees to/from training {{ training.training_name }}</h1>
+    <form action="{{ url_for('trainings_deets', company_username=company_username) }}?v={{ training.training_name }}" method="post" novalidate>
+        <p>
+            <table>
+                <tr>
+                  <th></th>
+                  <th></th>
+                  <th></th>
+                </tr>
+                {% for employee in company.employees %}
+                <tr>
+                  <td>{{ employee.employee_name }}</td>
+                  <td>{{ employee.employee_surname }}</td>
+                  {% if training.training_status == True %}
+                  {% if training in employee.training_subscriptions %}
+                  <td><button type="submit" name="remove" value="{{ employee.employee_id }}" >Remove</button></td>
+                  {% elif training not in employee.training_subscriptions %}
+                  <td><button type="submit" name="add" value="{{ employee.employee_id }}" >Add</button></td>
+                  {% endif %}
+                  {% elif training.training_status == False %}
+                  {% if training in employee.training_subscriptions %}
+                  <td>Participated</td>
+                  {% elif training not in employee.training_subscriptions %}
+                  <td>Did not Participate</td>
+                  {% endif %}
+                  {% endif %}
+                </tr>
+                {% endfor %}
+              </table>
+        </p>
+    </form>
+{% endblock %}

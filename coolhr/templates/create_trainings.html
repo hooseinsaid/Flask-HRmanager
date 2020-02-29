@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>Add a new Training</h1>
+    <form action="" method="post" novalidate>
+        {{ form.hidden_tag() }}
+        <p>
+            {{ form.training_name.label }}<br>
+            {{ form.training_name(size=32) }}<br>
+            {% for error in form.training_name.errors %}
+            <span style="color: red;">{{ error }}</span>
+            {% endfor %}
+        </p>
+        <p>
+            {{ form.training_description.label }}<br>
+            {{ form.training_description(cols=32, rows=4, style='resize:none') }}<br>
+            {% for error in form.training_description.errors %}
+            <span style="color: red;">{{ error }}</span>
+            {% endfor %}
+        </p>
+        <p>{{ form.training_submit() }}</p>
+    </form>
+
+
+    <form action="{{ url_for('manage_trainings', company_username=company_username) }}" method="post" novalidate>
+        <p>
+            <table>
+                <tr>
+                  <th></th>
+                  <th></th>
+                  <th></th>
+                </tr>
+                {% for train in training %}
+                <tr>
+                  <td>{{ train.training_name }}</td>
+                  <td><a href="{{ url_for('trainings_deets', company_username=company_username) }}?v={{ train.training_name }}">manage/view details</a></td>
+                  <td><button type="submit" name="delete" value="{{ train.training_id }}" >Delete</button></td>
+                  {% if train.training_status == True %}
+                    <td><button type="submit" name="mark_complete" value="{{ train.training_id }}" >Mark as Completed</button></td>
+                  {% elif train.training_status == False %}
+                    <td>Completed</td>
+                  {% endif %}
+                </tr>
+                {% endfor %}
+              </table>
+        </p>
+    </form>
+{% endblock %}

@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block content %}
+    {% if training_available %}
+    <h1>Your Company's available trainings</h1>
+    {% else %}
+    <h1>There's no training from your company yet</h1>
+    {% endif %}
+    
+    <form action="{{ url_for('training_subscription', company_username=company_username) }}" method="post" novalidate>
+        <p>
+            <table>
+                <tr>
+                  <th></th>
+                  <th></th>
+                  <th></th>
+                </tr>
+                {% for train in training_available %}
+                <tr>
+                  <td>{{ train.training_name }}</td>
+                  <td><a href="{{ url_for('em_trainings_deets', company_username=company_username) }}?v={{ train.training_name }}">view details</a></td>
+                  {% if train.training_status == True %}
+                  {% if train in employee.training_subscriptions %}
+                  <td><button type="submit" name="unsubscribe" value="{{ train.training_id }}" >Unsubscribe</button></td>
+                  {% elif train not in employee.training_subscriptions %}
+                  <td><button type="submit" name="subscribe" value="{{ train.training_id }}" >Subscribe</button></td>
+                  {% endif %}
+                  {% elif train.training_status == False %}
+                  <td>Not Active</td>
+                  {% endif %}
+                  {% if train in employee.training_subscriptions %}
+                  <td>Involved</td>
+                  {% elif train not in employee.training_subscriptions %}
+                  <td>Not Involved</td>
+                  {% endif %}
+                </tr>
+                {% endfor %}
+              </table>
+        </p>
+    </form>
+{% endblock %}

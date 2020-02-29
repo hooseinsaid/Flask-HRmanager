@@ -1,0 +1,30 @@
+<html>
+    <head>
+      {% if title %}
+      <title>{{ title|capitalize }} - CoolHR</title>
+      {% else %}
+      <title>Welcome to CoolHR</title>
+      {% endif %}
+    </head>
+    <body>
+        <div>
+            CoolHR:
+            <a href="{{ url_for('company_signup') }}">Register your Company</a>
+            <a href="{{ url_for('company_username') }}">Sign in</a>
+            {% if (session.get('employee_email') or session.get('company_email')) %}
+            <a href="{{ url_for('logout') }}">Logout</a>
+            {% endif %}
+        </div>
+        <hr>
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        <ul>
+            {% for message in messages %}
+            <li>{{ message }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+        {% endwith %}
+        {% block content %}{% endblock %}
+    </body>
+</html>

@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>Enter your Company's username to continue to login</h1>
+    <form action="" method="post" novalidate>
+        {{ form.hidden_tag() }}
+        <p>
+            {{ form.company_username.label }}<br>
+            {{ form.company_username(size=32) }}<br>
+            {% for error in form.company_username.errors %}
+            <span style="color: red;">{{ error }}</span>
+            {% endfor %}
+        </p>
+        <p>{{ form.submit() }}</p>
+    </form>
+    <p>
+        Forgot Your Company's username?
+        <a href="{{ url_for('recover_company_username') }}">Click to Recover It</a>
+    </p>
+{% endblock %}

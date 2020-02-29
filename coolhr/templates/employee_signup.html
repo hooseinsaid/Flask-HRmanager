@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>Employee register</h1>
+    <form action="" method="post" novalidate>
+        {{ form.hidden_tag() }}
+        <p>
+            {{ form.employee_name.label }}<br>
+            {{ form.employee_name(size=32) }}<br>
+            {% for error in form.employee_name.errors %}
+            <span style="color: red;">{{ error }}</span>
+            {% endfor %}
+        </p>
+        <p>
+            {{ form.employee_surname.label }}<br>
+            {{ form.employee_surname(size=32) }}<br>
+            {% for error in form.employee_surname.errors %}
+            <span style="color: red;">{{ error }}</span>
+            {% endfor %}
+        </p>
+        <p>
+            {{ form.employee_username.label }}<br>
+            {{ form.employee_username(size=32) }}<br>
+            {% for error in form.employee_username.errors %}
+            <span style="color: red;">{{ error }}</span>
+            {% endfor %}
+        </p>
+        <p>
+            {{ form.employee_email.label }}<br>
+            {{ form.employee_email(size=32) }}<br>
+            {% for error in form.employee_email.errors %}
+            <span style="color: red;">{{ error }}</span>
+            {% endfor %}
+        </p>
+        <p>
+            {{ form.employee_password.label }}<br>
+            {{ form.employee_password(size=32) }}<br>
+            {% for error in form.employee_password.errors %}
+            <span style="color: red;">{{ error }}</span>
+            {% endfor %}
+        </p>
+        <p>
+            {{ form.employee_password2.label }}<br>
+            {{ form.employee_password2(size=32) }}<br>
+            {% for error in form.employee_password2.errors %}
+            <span style="color: red;">{{ error }}</span>
+            {% endfor %}
+        </p>
+        <p>{{ form.employee_submit() }}</p>
+    </form>
+{% endblock %}

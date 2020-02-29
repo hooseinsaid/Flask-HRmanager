@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>Register your Company</h1>
+    <form action="" method="post" novalidate>
+        {{ form.hidden_tag() }}
+        <p>
+            {{ form.company_name.label }}<br>
+            {{ form.company_name(size=32) }}<br>
+            {% for error in form.company_name.errors %}
+            <span style="color: red;">{{ error }}</span>
+            {% endfor %}
+        </p>
+        <p>
+            <b>localhost:5000/ </b>{{ form.company_username(size=32) }}<br>
+            {% for error in form.company_username.errors %}
+            <span style="color: red;">{{ error }}</span>
+            {% endfor %}
+        </p>
+        <p>
+            {{ form.company_email.label }}<br>
+            {{ form.company_email(size=32) }}<br>
+            {% for error in form.company_email.errors %}
+            <span style="color: red;">{{ error }}</span>
+            {% endfor %}
+        </p>
+        <p>
+            {{ form.company_password.label }}<br>
+            {{ form.company_password(size=32) }}<br>
+            {% for error in form.company_password.errors %}
+            <span style="color: red;">{{ error }}</span>
+            {% endfor %}
+        </p>
+        <p>
+            {{ form.company_password2.label }}<br>
+            {{ form.company_password2(size=32) }}<br>
+            {% for error in form.company_password2.errors %}
+            <span style="color: red;">{{ error }}</span>
+            {% endfor %}
+        </p>
+        <p>{{ form.company_submit() }}</p>
+    </form>
+{% endblock %}
