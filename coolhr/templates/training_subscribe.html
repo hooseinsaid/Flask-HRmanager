@@ -18,7 +18,7 @@
                 {% for train in training_available %}
                 <tr>
                   <td>{{ train.training_name }}</td>
-                  <td><a href="{{ url_for('em_trainings_deets', company_username=company_username) }}?v={{ train.training_name }}">view details</a></td>
+                  <td><a href="{{ url_for('em_trainings_deets', company_username=company_username, v=train.training_name) }}">view details</a></td>
                   {% if train.training_status == True %}
                   {% if train in employee.training_subscriptions %}
                   <td><button type="submit" name="unsubscribe" value="{{ train.training_id }}" >Unsubscribe</button></td>

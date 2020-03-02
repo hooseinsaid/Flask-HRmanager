@@ -331,7 +331,7 @@ def trainings_deets(company_username):
                     flash("This training has been marked as Completed")
             else:
                 flash("This training is no longer available")
-    return render_template('training_deets.html', form=form, company_username=company_username, training=training, company=company)
+    return render_template('training_deets.html', form=form, training=training, company=company)
 
 
 @app.route('/<company_username>/subscribe-training', methods=['GET', 'POST'])
@@ -370,7 +370,7 @@ def training_subscription(company_username):
 @access_employee
 def em_trainings_deets(company_username):
     company = Companies.query.filter_by(company_username=company_username).first_or_404()
-    training = Trainings.query.filter_by(training_name=request.args.get("v"), company_id=company.company_id).first()
+    training = Trainings.query.filter_by(training_name=request.args.get("v"), company_id=company.company_id).first_or_404()
     if training is None:
         return redirect(url_for('training_subscription', company_username=company_username))
     return render_template('em_training_deets.html', training=training)

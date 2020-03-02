@@ -33,7 +33,7 @@
                 {% for train in training %}
                 <tr>
                   <td>{{ train.training_name }}</td>
-                  <td><a href="{{ url_for('trainings_deets', company_username=company_username) }}?v={{ train.training_name }}">manage/view details</a></td>
+                  <td><a href="{{ url_for('trainings_deets', company_username=company_username, v=train.training_name) }}">manage/view details</a></td>
                   <td><button type="submit" name="delete" value="{{ train.training_id }}" >Delete</button></td>
                   {% if train.training_status == True %}
                     <td><button type="submit" name="mark_complete" value="{{ train.training_id }}" >Mark as Completed</button></td>
