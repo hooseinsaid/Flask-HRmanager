@@ -25,6 +25,7 @@ body {
 
 .alert {
   border-radius: 0;
+  color: #000000a8;
 }
 
 .form-alert {
@@ -68,6 +69,16 @@ body {
   background: #fcebee;
 }
 
+.alert-dark {
+  background: #d6d8d98c;
+  border: 1px solid #52525267;
+}
+
+.alert-warning {
+  background: #fff3cd;
+  border: 1px solid #d0c5a4;
+}
+
 .auth-form {
   padding: 20px;
   margin: auto;
@@ -89,7 +100,6 @@ body {
   margin: auto;
   padding: 20px;
   padding-bottom: 0;
-  height: inherit;
 }
 
 .auth-tab-header .tab-item {

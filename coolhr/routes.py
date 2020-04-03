@@ -69,9 +69,9 @@ def company_signup():
         company.set_password(form.company_password.data)
         db.session.add(company)
         db.session.commit()
-        flash('You Company has been successfully registered')
+        flash('Your Company has been successfully registered.', 'dark')
         return redirect(url_for('login', company_username=form.company_username.data))
-    return render_template('company_signup.html', form=form)
+    return render_template('company_signup.html', form=form, alert_type='form-alert')
 
 
 @app.route('/company-username', methods=['GET', 'POST'])
@@ -84,7 +84,7 @@ def company_username():
     username = form.company_username.data
     if form.validate_on_submit():
         return redirect(url_for('login', company_username=username))
-    return render_template('company_username.html', form=form)
+    return render_template('company_username.html', form=form, alert_type='form-alert')
 
 
 @app.route('/<company_username>/login', methods=['GET', 'POST'])
@@ -166,9 +166,8 @@ def reset_password_request():
             send_password_reset_email(company)
         elif employee:
             send_password_reset_email(employee)
-        flash('Check your email for the instructions to reset your password')
-        # return redirect(url_for('reset_password_request'))
-    return render_template('reset_password_request.html', title='Reset Password', form=form)
+        flash('Check your email for the instructions to reset your password', 'dark')
+    return render_template('reset_password_request.html', title='Reset Password', form=form, alert_type='form-alert')
 
 
 @app.route('/reset-password/<token>', methods=['GET', 'POST'])
@@ -195,7 +194,7 @@ def reset_password(token):
             db.session.commit()
             flash('Your password has been reset.')
             return redirect(url_for('login', company_username=e_company.company_username, n_email=employee.employee_email))
-    return render_template('reset_password.html', title='Reset Password', form=form)
+    return render_template('reset_password.html', title='Reset Password', form=form, alert_type='form-alert')
 
 
 @app.route('/recover-company-username', methods=['GET', 'POST'])
@@ -210,15 +209,15 @@ def recover_company_username():
         employee = Employees.query.filter_by(employee_email=form.email.data).first()
         if company:
             company_username = company.company_username
-            flash("Your Company's username is {}".format(company_username))
+            flash("Your Company's username is '{}'".format(company_username), "dark")
             return redirect(url_for('login', company_username=company_username, n_email=form.email.data))
         elif employee:
             company_username = Companies.query.filter_by(company_id=employee.company_id).first().company_username
-            flash("Your Company's username is {}".format(company_username))
+            flash("Your Company's username is '{}'".format(company_username), "dark")
             return redirect(url_for('login', company_username=company_username, n_email=form.email.data))
         else:
-            flash("User not Found. check your email for typos if you have previously registered")
-    return render_template('recover_company_username.html', title='Recover Username', form=form)
+            flash("User not Found. check your email for possible error", "warning")
+    return render_template('recover_company_username.html', title='Recover Username', form=form, alert_type='form-alert')
 
 
 #training creation

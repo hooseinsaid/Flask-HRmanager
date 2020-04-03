@@ -72,16 +72,16 @@ class EditTrainingForm(FlaskForm):
 
 class ResetPasswordRequestForm(FlaskForm):
     email = StringField('Email', validators=[DataRequired(), Email()])
-    submit = SubmitField('Request Password Reset')
+    submit = SubmitField('Proceed')
 
 class ResetPasswordForm(FlaskForm):
     password = PasswordField('Password', validators=[DataRequired()])
     password2 = PasswordField('Repeat Password', validators=[DataRequired(), EqualTo('password', message='passwords must match')])
-    submit = SubmitField('Request Password Reset')
+    submit = SubmitField('Confirm')
 
 class RecoverCompanyUsernameForm(FlaskForm):
     email = StringField('Email', validators=[DataRequired(), Email()])
-    submit = SubmitField('Click to proceed')
+    submit = SubmitField('Proceed')
 
 
 

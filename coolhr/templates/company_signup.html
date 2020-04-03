@@ -1,43 +1,67 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h1>Register your Company</h1>
-    <form action="" method="post" novalidate>
-        {{ form.hidden_tag() }}
-        <p>
-            {{ form.company_name.label }}<br>
-            {{ form.company_name(size=32) }}<br>
-            {% for error in form.company_name.errors %}
-            <span style="color: red;">{{ error }}</span>
-            {% endfor %}
-        </p>
-        <p>
-            <b>localhost:5000/ </b>{{ form.company_username(size=32) }}<br>
-            {% for error in form.company_username.errors %}
-            <span style="color: red;">{{ error }}</span>
-            {% endfor %}
-        </p>
-        <p>
-            {{ form.company_email.label }}<br>
-            {{ form.company_email(size=32) }}<br>
-            {% for error in form.company_email.errors %}
-            <span style="color: red;">{{ error }}</span>
-            {% endfor %}
-        </p>
-        <p>
-            {{ form.company_password.label }}<br>
-            {{ form.company_password(size=32) }}<br>
-            {% for error in form.company_password.errors %}
-            <span style="color: red;">{{ error }}</span>
-            {% endfor %}
-        </p>
-        <p>
-            {{ form.company_password2.label }}<br>
-            {{ form.company_password2(size=32) }}<br>
-            {% for error in form.company_password2.errors %}
-            <span style="color: red;">{{ error }}</span>
-            {% endfor %}
-        </p>
-        <p>{{ form.company_submit() }}</p>
-    </form>
+<div class="form-body">
+    <div class="wrapper">
+        <div class="auth-container">
+            <h6 class="h4 auth-form-header font-weight-normal">COMPANY SIGN UP</h6>
+            <div class="auth-form">
+                <form action="" method="post" novalidate>
+                    {{ form.hidden_tag() }}
+                    
+                    {% include "_flash.html" %}
+
+                    <div class="form-item">
+                        {{ form.company_name.label(class="sr-only") }}
+                        {{ form.company_name(placeholder="Company Name", class="form-control") }}
+                        {% for error in form.company_name.errors %}
+                        <hr class="not-valid-border">
+                        <span class="not-valid">{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                    
+                    <div class="form-item">
+                        {{ form.company_username.label(class="sr-only") }}
+                        {{ form.company_username(placeholder="Company Username", class="form-control") }}
+                        {% for error in form.company_username.errors %}
+                        <hr class="not-valid-border">
+                        <span class="not-valid">{{ error }}</span>
+                        {% endfor %} 
+                    </div>
+
+                    <div class="form-item">
+                        {{ form.company_email.label(class="sr-only") }}
+                        {{ form.company_email(placeholder="Company Email", class="form-control") }}
+                        {% for error in form.company_email.errors %}
+                        <hr class="not-valid-border">
+                        <span class="not-valid">{{ error }}</span>
+                        {% endfor %} 
+                    </div>
+
+                    <div class="form-item">
+                        {{ form.company_password.label(class="sr-only") }}
+                        {{ form.company_password(placeholder="Password", class="form-control") }}
+                        {% for error in form.company_password.errors %}
+                        <hr class="not-valid-border">
+                        <span class="not-valid">{{ error }}</span>
+                        {% endfor %} 
+                    </div>
+
+                    <div class="form-item">
+                        {{ form.company_password2.label(class="sr-only") }}
+                        {{ form.company_password2(placeholder="Confirm Password", class="form-control") }}
+                        {% for error in form.company_password2.errors %}
+                        <hr class="not-valid-border">
+                        <span class="not-valid">{{ error }}</span>
+                        {% endfor %} 
+                    </div>
+
+                    <div class="form-item form-button">
+                        {{ form.company_submit(class="btn btn-lg btn-secondary btn-block") }}
+                    </div>
+                </form> 
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}
