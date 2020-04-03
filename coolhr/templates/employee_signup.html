@@ -1,51 +1,99 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h1>Employee register</h1>
-    <form action="" method="post" novalidate>
-        {{ form.hidden_tag() }}
-        <p>
-            {{ form.employee_name.label }}<br>
-            {{ form.employee_name(size=32) }}<br>
-            {% for error in form.employee_name.errors %}
-            <span style="color: red;">{{ error }}</span>
-            {% endfor %}
-        </p>
-        <p>
-            {{ form.employee_surname.label }}<br>
-            {{ form.employee_surname(size=32) }}<br>
-            {% for error in form.employee_surname.errors %}
-            <span style="color: red;">{{ error }}</span>
-            {% endfor %}
-        </p>
-        <p>
-            {{ form.employee_username.label }}<br>
-            {{ form.employee_username(size=32) }}<br>
-            {% for error in form.employee_username.errors %}
-            <span style="color: red;">{{ error }}</span>
-            {% endfor %}
-        </p>
-        <p>
-            {{ form.employee_email.label }}<br>
-            {{ form.employee_email(size=32) }}<br>
-            {% for error in form.employee_email.errors %}
-            <span style="color: red;">{{ error }}</span>
-            {% endfor %}
-        </p>
-        <p>
-            {{ form.employee_password.label }}<br>
-            {{ form.employee_password(size=32) }}<br>
-            {% for error in form.employee_password.errors %}
-            <span style="color: red;">{{ error }}</span>
-            {% endfor %}
-        </p>
-        <p>
-            {{ form.employee_password2.label }}<br>
-            {{ form.employee_password2(size=32) }}<br>
-            {% for error in form.employee_password2.errors %}
-            <span style="color: red;">{{ error }}</span>
-            {% endfor %}
-        </p>
-        <p>{{ form.employee_submit() }}</p>
-    </form>
+<div class="form-body">
+    <div class="wrapper">
+        <h1 class="h3 mb-3 font-weight-bold text-center">{{ company_username|upper }}</h1>
+        <div class="auth-container">
+            <!-- <div class="auth-tab-header">
+                <ul class="list-unstyled">
+                    <a href="{{ url_for('employeeregister', company_username=company_username) }}">
+                        <li class="h4 font-weight-normal tab-item float-left text-center">Sign Up</li>
+                    </a>
+                    <a href="{{ url_for('login', company_username=company_username) }}">
+                        <li class="h4 font-weight-normal tab-item float-right text-center">Login</li>
+                    </a>
+                </ul>
+            </div> -->
+            <div class="auth-tab-header">
+                <ul class="list-unstyled">
+                    <li class=" tab-item float-left">
+                        <h6 class="h4 auth-form-header font-weight-normal">SIGN UP</h6> 
+                    </li>
+                    <li class="tab-item float-right align-right">
+                        <a href="{{ url_for('login', company_username=company_username) }}">
+                            <button class="btn btn-outline-secondary float-right tab-item-button">LOGIN</button>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            
+            <div class="auth-form">
+                <form action="" method="post" novalidate>
+                    {{ form.hidden_tag() }}
+                    
+                    {% include "_flash.html" %}
+
+                    <div class="form-item">
+                        {{ form.employee_name.label(class="sr-only") }}
+                        {{ form.employee_name(placeholder="Name", class="form-control") }}
+                        {% for error in form.employee_name.errors %}
+                        <hr class="not-valid-border">
+                        <span class="not-valid">{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                    
+                    <div class="form-item">
+                        {{ form.employee_surname.label(class="sr-only") }}
+                        {{ form.employee_surname(placeholder="Surname", class="form-control") }}
+                        {% for error in form.employee_surname.errors %}
+                        <hr class="not-valid-border">
+                        <span class="not-valid">{{ error }}</span>
+                        {% endfor %} 
+                    </div>
+
+                    <div class="form-item">
+                        {{ form.employee_username.label(class="sr-only") }}
+                        {{ form.employee_username(placeholder="Username", class="form-control") }}
+                        {% for error in form.employee_username.errors %}
+                        <hr class="not-valid-border">
+                        <span class="not-valid">{{ error }}</span>
+                        {% endfor %} 
+                    </div>
+
+                    <div class="form-item">
+                        {{ form.employee_email.label(class="sr-only") }}
+                        {{ form.employee_email(placeholder="Email", class="form-control") }}
+                        {% for error in form.employee_email.errors %}
+                        <hr class="not-valid-border">
+                        <span class="not-valid">{{ error }}</span>
+                        {% endfor %} 
+                    </div>
+
+                    <div class="form-item">
+                        {{ form.employee_password.label(class="sr-only") }}
+                        {{ form.employee_password(placeholder="Password", class="form-control") }}
+                        {% for error in form.employee_password.errors %}
+                        <hr class="not-valid-border">
+                        <span class="not-valid">{{ error }}</span>
+                        {% endfor %} 
+                    </div>
+
+                    <div class="form-item">
+                        {{ form.employee_password2.label(class="sr-only") }}
+                        {{ form.employee_password2(placeholder="Confirm Password", class="form-control") }}
+                        {% for error in form.employee_password2.errors %}
+                        <hr class="not-valid-border">
+                        <span class="not-valid">{{ error }}</span>
+                        {% endfor %} 
+                    </div>
+
+                    <div class="form-item form-button">
+                        {{ form.employee_submit(class="btn btn-lg btn-secondary btn-block") }}
+                    </div>
+                </form> 
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}

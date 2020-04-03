@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block navigation %}
+    <div>
+        CoolHR:
+        <a href="{{ url_for('training_subscription', company_username=company_username) }}">Trainings</a>
+        {% if (session.get('employee_email') or session.get('company_email')) %}
+        <a href="{{ url_for('logout') }}">Logout</a>
+        {% endif %}
+    </div>
+{% endblock %}
+{% block content %}
+{% endblock %}

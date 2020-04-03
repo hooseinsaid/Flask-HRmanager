@@ -76,6 +76,8 @@ class Trainings(db.Model):
     training_description = db.Column(db.String(1024))
     training_status = db.Column(db.Boolean, default=True)
     company_id = db.Column(db.Integer, db.ForeignKey('companies.company_id'))
+    date_created = db.Column(db.DateTime)
+    date_completed = db.Column(db.DateTime)
 
     def __repr__(self):
         return '<Training {}>'.format(self.training_name)

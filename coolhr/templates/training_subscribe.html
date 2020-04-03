@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "base_e.html" %}
 
 {% block content %}
     {% if training_available %}
@@ -18,7 +18,6 @@
                 {% for train in training_available %}
                 <tr>
                   <td>{{ train.training_name }}</td>
-                  <td><a href="{{ url_for('em_trainings_deets', company_username=company_username, v=train.training_name) }}">view details</a></td>
                   {% if train.training_status == True %}
                   {% if train in employee.training_subscriptions %}
                   <td><button type="submit" name="unsubscribe" value="{{ train.training_id }}" >Unsubscribe</button></td>
@@ -33,6 +32,21 @@
                   {% elif train not in employee.training_subscriptions %}
                   <td>Not Involved</td>
                   {% endif %}
+                </tr>
+                <tr>
+                  <td>
+                    <details>
+                      <summary>Details</summary>
+                      <p>Training Name: {{train.training_name}}</p><br>
+                      <p>Training Creation Date: {{train.date_created}}</p><br>
+                      {% if train.date_completed %}
+                      <p>Training Completion Date: {{train.date_completed}}</p><br>
+                      {% endif %}
+                      {% if train.training_description %}
+                      <p>Training Description: {{train.training_description}}</p><br>
+                      {% endif %}
+                    </details>
+                  </td>
                 </tr>
                 {% endfor %}
               </table>

@@ -1,0 +1,18 @@
+{% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+            <ul class="ul-alert {{ alert_type }}">
+                {% for category, message in messages %}
+                    {% if alert_type != 'form-alert' %}
+                        <div class="alert custom-alert alert-{{ category }} alert-dismissible" role="alert">
+                            <button type="button" class="close" data-dismiss="alert">&times;</button>
+                            <li>{{ message }}</li>
+                        </div>
+                    {% elif alert_type == 'form-alert' %}
+                        <div class="alert alert-{{ category }}" role="alert">
+                            <li class="list-unstyled text-center">{{ message }}</li>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            </ul>
+    {% endif %}
+{% endwith %}

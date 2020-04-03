@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+
+{% block navigation %}
+    <div>
+        CoolHR:
+        <a href="{{ url_for('company_signup') }}">Register your Company</a>
+        <a href="{{ url_for('company_username') }}">Sign in</a>
+    </div>
+{% endblock %}
+{% block content %}{% endblock %}
