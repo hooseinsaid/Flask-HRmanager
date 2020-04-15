@@ -1,0 +1,11 @@
+Dear {{ user.company_name }}
+
+Welcome to CoolHR
+Your username is: {{ user.company_username }}
+Keep it safe and pass it to employees to be able to register
+To be redirected to your the login page tailored specifically for you, click on the following link:
+{{ url_for('login', company_username=user.company_username, _external=True) }}
+
+Sincerely,
+
+The CoolHR Team
