@@ -11,7 +11,7 @@ class LoginForm(FlaskForm):
 
 class CompanyUsername(FlaskForm):
     company_username = StringField('Company Username', validators=[DataRequired()])
-    submit = SubmitField('Proceed')
+    submit = SubmitField('Continue')
 
     def validate_company_username(self, username):
         company = Companies.query.filter_by(company_username=username.data).first()
@@ -72,7 +72,7 @@ class EditTrainingForm(FlaskForm):
 
 class ResetPasswordRequestForm(FlaskForm):
     email = StringField('Email', validators=[DataRequired(), Email()])
-    submit = SubmitField('Proceed')
+    submit = SubmitField('Continue')
 
 class ResetPasswordForm(FlaskForm):
     password = PasswordField('Password', validators=[DataRequired()])
@@ -81,7 +81,10 @@ class ResetPasswordForm(FlaskForm):
 
 class RecoverCompanyUsernameForm(FlaskForm):
     email = StringField('Email', validators=[DataRequired(), Email()])
-    submit = SubmitField('Proceed')
+    submit = SubmitField('Continue')
+
+
+#deal with duplications like RecoverCompanyUsernameForm and ResetPasswordRequestForm and EditTrainingForm and TrainingForm
 
 
 

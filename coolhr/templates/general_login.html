@@ -3,7 +3,7 @@
 {% block content %}
     <div class="form-body">
         <div class="wrapper">
-            <h1 class="h3 mb-3 font-weight-bold text-center">{{ company_username|upper }}</h1>
+            <h2 class="text-center">{{ company_username|upper }}</h2>
             <div class="auth-container">
                 <div class="auth-tab-header">
                     <ul class="list-unstyled">
@@ -15,9 +15,9 @@
                                 <button class="btn btn-outline-secondary float-right tab-item-button">SIGN UP</button>
                             </a>
                         </li>
-                </ul>
-            </div>
-                <!-- <h6 class="h4 auth-form-header font-weight-normal">LOGIN</h6> -->
+                    </ul>
+                </div>
+
                 <div class="auth-form">
                     <form action="" method="post" novalidate>
                         {{ form.hidden_tag() }}
@@ -49,9 +49,8 @@
                         <div class="form-item form-button">
                             {{ form.submit(class="btn btn-lg btn-secondary btn-block") }}
                         </div>
-
                         <!-- <div>New User? <a href="{{ url_for('employeeregister', company_username=company_username) }}">Click to Register!</a></div> -->
-                    </form> 
+                    </form>
                 </div>
             </div>
         </div>

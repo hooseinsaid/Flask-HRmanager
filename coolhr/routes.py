@@ -2,7 +2,7 @@ from datetime import datetime
 from flask import render_template, redirect, url_for, request, flash, session
 from coolhr import app, db, mail
 from coolhr.forms import *
-from coolhr.email import send_password_reset_email
+from coolhr.email import send_password_reset_email, send_company_welcome_email
 from coolhr.models import *
 from functools import wraps
 
@@ -69,7 +69,8 @@ def company_signup():
         company.set_password(form.company_password.data)
         db.session.add(company)
         db.session.commit()
-        flash('Your Company has been successfully registered.', 'dark')
+        flash('Your Company has been successfully registered.<br>Login here', 'dark')
+        send_company_welcome_email(company)
         return redirect(url_for('login', company_username=form.company_username.data))
     return render_template('company_signup.html', form=form, alert_type='form-alert')
 
@@ -86,6 +87,9 @@ def company_username():
         return redirect(url_for('login', company_username=username))
     return render_template('company_username.html', form=form, alert_type='form-alert')
 
+@app.route('/<company_username>')
+def redirectlogin(company_username):
+    return redirect (url_for('login', company_username=company_username))
 
 @app.route('/<company_username>/login', methods=['GET', 'POST'])
 def login(company_username):
@@ -117,7 +121,7 @@ def login(company_username):
             # if next_page:
             #     return redirect(next_page)
             return redirect(url_for('profile', company_username=company_username))
-        flash('Invalid username or password. Please try again', 'login-danger')
+        flash('Invalid username or password. Please try again', 'error')
     return render_template('general_login.html', form=form, company_username=company_username, alert_type='form-alert')
 
 
@@ -186,13 +190,13 @@ def reset_password(token):
         if company:
             company.set_password(form.password.data)
             db.session.commit()
-            flash('Your password has been reset.')
+            flash('Your password has been reset.', 'dark')
             return redirect(url_for('login', company_username=company.company_username, n_email=company.company_email))
         elif employee:
             e_company = Companies.query.get(employee.company_id)
             employee.set_password(form.password.data)
             db.session.commit()
-            flash('Your password has been reset.')
+            flash('Your password has been reset.', 'dark')
             return redirect(url_for('login', company_username=e_company.company_username, n_email=employee.employee_email))
     return render_template('reset_password.html', title='Reset Password', form=form, alert_type='form-alert')
 
@@ -209,11 +213,11 @@ def recover_company_username():
         employee = Employees.query.filter_by(employee_email=form.email.data).first()
         if company:
             company_username = company.company_username
-            flash("Your Company's username is '{}'".format(company_username), "dark")
+            flash("Your Company's username is <strong><em>{}</em></strong>".format(company_username), "dark")
             return redirect(url_for('login', company_username=company_username, n_email=form.email.data))
         elif employee:
             company_username = Companies.query.filter_by(company_id=employee.company_id).first().company_username
-            flash("Your Company's username is '{}'".format(company_username), "dark")
+            flash("Your Company's username is <strong><em>{}</em></strong>".format(company_username), "dark")
             return redirect(url_for('login', company_username=company_username, n_email=form.email.data))
         else:
             flash("User not Found. check your email for possible error", "warning")
