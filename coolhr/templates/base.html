@@ -9,6 +9,7 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+        <link href="https://netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet">
         <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
@@ -17,18 +18,15 @@
     <body>
         {% block navigation %}{% endblock %}
 
-        {% if alert_type != 'form-alert' %}
-            {% include "_flash.html" %}
-        {% endif %}
-
         {% block content %}{% endblock %}
-
+        
+        {% block script %}{% endblock %}
         <script>
             window.setTimeout(function() {
                 $(".custom-alert").slideUp(500, function(){
                     $(this).remove(); 
                 });
-            }, 5000);
+            }, 8000);
         </script>
     </body>
 </html>

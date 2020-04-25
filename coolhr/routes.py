@@ -141,7 +141,7 @@ def employeeregister(company_username):
         employee.set_password(form.employee_password.data)
         db.session.add(employee)
         db.session.commit()
-        flash('Employee successfully registered')
+        flash('Employee successfully registered', 'dark')
         return redirect(url_for('login', company_username=company_username))
     return render_template('employee_signup.html', form=form, company_username=company_username)
 

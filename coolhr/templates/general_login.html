@@ -3,7 +3,13 @@
 {% block content %}
     <div class="form-body">
         <div class="wrapper">
-            <h2 class="text-center">{{ company_username|upper }}</h2>
+            <div class="jumbotron jumbotron-fluid" style="width: 100%; max-width: 440px;">
+                <div class="container">
+                    <h2 class="text-center">{{ company_username|upper }}</h2>
+                    <div class="subtitle text-center">Sign up as a <em><strong>{{ company_username }}</strong></em> employee here</div>
+                </div>
+            </div>
+            
             <div class="auth-container">
                 <div class="auth-tab-header">
                     <ul class="list-unstyled">

@@ -41,9 +41,14 @@
             </div>
         </div>
     </div>
+{% endblock %}
+
+{% block script %}
     <script>
         $("input:radio").change(function () {$("#postSelection").prop("disabled", false);});
-
+    </script>
+    
+    <script>
         function redirect() {  
             var checkRadio = document.querySelector('input[name="selector"]:checked');
             if(checkRadio.id == "company-radio") {

@@ -1,55 +1,53 @@
 {% extends "base_e.html" %}
 
-{% block content %}
-    {% if training_available %}
-    <h1>Your Company's available trainings</h1>
-    {% else %}
-    <h1>There's no training from your company yet</h1>
-    {% endif %}
-    
-    <form action="{{ url_for('training_subscription', company_username=company_username) }}" method="post" novalidate>
-        <p>
-            <table>
-                <tr>
-                  <th></th>
-                  <th></th>
-                  <th></th>
-                </tr>
-                {% for train in training_available %}
-                <tr>
-                  <td>{{ train.training_name }}</td>
-                  {% if train.training_status == True %}
-                  {% if train in employee.training_subscriptions %}
-                  <td><button type="submit" name="unsubscribe" value="{{ train.training_id }}" >Unsubscribe</button></td>
-                  {% elif train not in employee.training_subscriptions %}
-                  <td><button type="submit" name="subscribe" value="{{ train.training_id }}" >Subscribe</button></td>
-                  {% endif %}
-                  {% elif train.training_status == False %}
-                  <td>Not Active</td>
-                  {% endif %}
-                  {% if train in employee.training_subscriptions %}
-                  <td>Involved</td>
-                  {% elif train not in employee.training_subscriptions %}
-                  <td>Not Involved</td>
-                  {% endif %}
-                </tr>
-                <tr>
-                  <td colspan="3">
-                    <details>
-                      <summary>Details</summary>
-                      <p>Training Name: {{train.training_name}}</p><br>
-                      <p>Training Creation Date: {{train.date_created}}</p><br>
-                      {% if train.date_completed %}
-                      <p>Training Completion Date: {{train.date_completed}}</p><br>
-                      {% endif %}
-                      {% if train.training_description %}
-                      <p>Training Description: {{train.training_description}}</p><br>
-                      {% endif %}
-                    </details>
-                  </td>
-                </tr>
-                {% endfor %}
-              </table>
-        </p>
-    </form>
+{% block content_template %}
+{% if training_available %}
+<h1>Your Company's available trainings</h1>
+{% else %}
+<h1>There's no training from your company yet</h1>
+{% endif %}
+
+<form action="{{ url_for('training_subscription', company_username=company_username) }}" method="post" novalidate>
+  <table>
+    <tr>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+    {% for train in training_available %}
+    <tr>
+      <td>{{ train.training_name }}</td>
+      {% if train.training_status == True %}
+      {% if train in employee.training_subscriptions %}
+      <td><button type="submit" name="unsubscribe" value="{{ train.training_id }}">Unsubscribe</button></td>
+      {% elif train not in employee.training_subscriptions %}
+      <td><button type="submit" name="subscribe" value="{{ train.training_id }}">Subscribe</button></td>
+      {% endif %}
+      {% elif train.training_status == False %}
+      <td>Not Active</td>
+      {% endif %}
+      {% if train in employee.training_subscriptions %}
+      <td>Involved</td>
+      {% elif train not in employee.training_subscriptions %}
+      <td>Not Involved</td>
+      {% endif %}
+    </tr>
+    <tr>
+      <td colspan="3">
+        <div id="training-details{{train.training_id}}" class="collapse">
+          <div>Training Creation Date: {{train.date_created}}</div>
+          {% if train.date_completed %}
+          <div>Training Completion Date: {{train.date_completed}}</div>
+          {% endif %}
+          {% if train.training_description %}
+          <div>Training Description: {{train.training_description}}</div>
+          {% endif %}
+        </div>
+        <button type="button" class="btn btn-primary btn-block caret-toggle collapsed" data-toggle="collapse"
+          data-target="#training-details{{train.training_id}}">Details</button>
+      </td>
+    </tr>
+    {% endfor %}
+  </table>
+</form>
 {% endblock %}
