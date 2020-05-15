@@ -64,24 +64,24 @@ class TrainingForm(FlaskForm):
     training_description = TextAreaField('Training Description', validators=[Length(min=0, max=1024)])
     training_submit = SubmitField('Publish Training')
 
-class EditTrainingForm(FlaskForm):
-    training_name = StringField('Traning Name', validators=[DataRequired(), Length(min=4, max=64)])
-    training_description = TextAreaField('Training Description', validators=[Length(min=0, max=1024)])
-    training_submit = SubmitField('Save Changes')
+# class EditTrainingForm(FlaskForm):
+#     training_name = StringField('Traning Name', validators=[DataRequired(), Length(min=4, max=64)])
+#     training_description = TextAreaField('Training Description', validators=[Length(min=0, max=1024)])
+#     training_submit = SubmitField('Save Changes')
 
 
-class ResetPasswordRequestForm(FlaskForm):
+class ResetPasswordnUsernameRequestForm(FlaskForm):
     email = StringField('Email', validators=[DataRequired(), Email()])
-    submit = SubmitField('Continue')
+    submit = SubmitField('Send Reset Link')
 
 class ResetPasswordForm(FlaskForm):
     password = PasswordField('Password', validators=[DataRequired()])
     password2 = PasswordField('Repeat Password', validators=[DataRequired(), EqualTo('password', message='passwords must match')])
     submit = SubmitField('Confirm')
 
-class RecoverCompanyUsernameForm(FlaskForm):
-    email = StringField('Email', validators=[DataRequired(), Email()])
-    submit = SubmitField('Continue')
+# class RecoverCompanyUsernameForm(FlaskForm):
+#     email = StringField('Email', validators=[DataRequired(), Email()])
+#     submit = SubmitField('Continue')
 
 
 #deal with duplications like RecoverCompanyUsernameForm and ResetPasswordRequestForm and EditTrainingForm and TrainingForm

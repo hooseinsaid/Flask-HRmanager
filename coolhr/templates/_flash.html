@@ -1,6 +1,6 @@
 {% with messages = get_flashed_messages(with_categories=true) %}
     {% if messages %}
-            <ul class="ul-alert {{ alert_type }}">
+            <ul class="ul-alert {{ alert_type }} list-unstyled">
                 {% for category, message in messages %}
                     {% if alert_type != 'form-alert' %}
                         <div class="alert custom-alert alert-{{ category }} alert-dismissible" role="alert">
@@ -9,7 +9,7 @@
                         </div>
                     {% elif alert_type == 'form-alert' %}
                         <div class="alert alert-{{ category }}" role="alert">
-                            <li class="list-unstyled text-center">{{ message|safe }}</li>
+                            <li class="text-center">{{ message|safe }}</li>
                         </div>
                     {% endif %}
                 {% endfor %}

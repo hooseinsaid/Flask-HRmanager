@@ -52,7 +52,9 @@ def index():
     if session.get('company_email'):
         return "Your Company is signed in. redirect to company page"
     elif session.get('employee_email'):
-        return "Employee is already signed in. redirect to employee page"
+        employee = Employees.query.filter_by(employee_email=session.get('employee_email')).first()
+        company = Companies.query.filter_by(company_id=employee.company_id).first()
+        return redirect(url_for('profile', company_username=company.company_username))
     return render_template('home.html')
 
 
@@ -148,12 +150,11 @@ def employeeregister(company_username):
 
 @app.route('/logout')
 def logout():
-   # removes the email from the session if it is there
    if session.get('company_email'):
        session.pop('company_email')
    elif session.get('employee_email'):
        session.pop('employee_email')
-   return redirect(url_for('company_username'))
+   return redirect(url_for('index'))
 
 
 @app.route('/reset-password-request', methods=['GET', 'POST'])
@@ -162,7 +163,7 @@ def reset_password_request():
         return "Your Company is signed in. redirect to company page"
     elif session.get('employee_email'):
         return "Employee is already signed in. redirect to employee page"
-    form = ResetPasswordRequestForm()
+    form = ResetPasswordnUsernameRequestForm()
     if form.validate_on_submit():
         company = Companies.query.filter_by(company_email=form.email.data).first()
         employee = Employees.query.filter_by(employee_email=form.email.data).first()
@@ -207,7 +208,7 @@ def recover_company_username():
         return "Your Company is signed in. redirect to company page"
     elif session.get('employee_email'):
         return "Employee is already signed in. redirect to employee page"
-    form = RecoverCompanyUsernameForm()
+    form = ResetPasswordnUsernameRequestForm()
     if form.validate_on_submit():
         company = Companies.query.filter_by(company_email=form.email.data).first()
         employee = Employees.query.filter_by(employee_email=form.email.data).first()
@@ -276,7 +277,7 @@ def manage_trainings(company_username):
 @app.route('/<company_username>/training-deets', methods=['GET', 'POST'])
 @access_company
 def trainings_deets(company_username):
-    form = EditTrainingForm()
+    form = TrainingForm()
     company = Companies.query.filter_by(company_username=company_username).first_or_404()
     training = Trainings.query.filter_by(training_name=request.args.get("v"), company_id=company.company_id).first_or_404()
     training2 = Trainings.query.filter_by(training_name=form.training_name.data, company_id=company.company_id).first()
@@ -384,10 +385,11 @@ def training_subscription(company_username):
                 return redirect(url_for('training_subscription', company_username=company_username))
         else:
             flash("This training has been completed or is no longer available")
-    return render_template('training_subscribe.html', employee=employee, training_available=training_available, company_username=company_username)
+    return render_template('training_subscribe.html', employee=employee, title="Trainings", training_available=training_available, company_username=company_username)
 
 
 @app.route('/<company_username>/profile', methods=['GET', 'POST'])
 @access_employee
 def profile(company_username):
-    return render_template('base_e.html', company_username=company_username)
+    employee = Employees.query.filter_by(employee_email=session.get('employee_email')).first()
+    return render_template('base_e.html', title="Profile", employee=employee, company_username=company_username)

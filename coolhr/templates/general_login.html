@@ -3,13 +3,14 @@
 {% block content %}
     <div class="form-body">
         <div class="wrapper">
-            <div class="jumbotron jumbotron-fluid" style="width: 100%; max-width: 440px;">
+            <!-- <div class="jumbotron jumbotron-fluid" style="width: 100%; max-width: 440px;">
                 <div class="container">
                     <h2 class="text-center">{{ company_username|upper }}</h2>
                     <div class="subtitle text-center">Sign up as a <em><strong>{{ company_username }}</strong></em> employee here</div>
                 </div>
-            </div>
+            </div> -->
             
+            <h2 class="text-center">{{ company_username|upper }}</h2>
             <div class="auth-container">
                 <div class="auth-tab-header">
                     <ul class="list-unstyled">
@@ -52,10 +53,11 @@
                             <a href="{{ url_for('reset_password_request') }}">Forgot Your Password?</a>
                         </div> 
 
-                        <div class="form-item form-button">
-                            {{ form.submit(class="btn btn-lg btn-secondary btn-block") }}
+                        <div class="button-container">
+                           <div class="form-item">
+                                {{ form.submit(class="btn btn-lg btn-secondary") }}
+                            </div> 
                         </div>
-                        <!-- <div>New User? <a href="{{ url_for('employeeregister', company_username=company_username) }}">Click to Register!</a></div> -->
                     </form>
                 </div>
             </div>

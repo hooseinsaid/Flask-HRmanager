@@ -20,9 +20,12 @@
                         {% endfor %}
                     </div>
                     
-                    <div class="form-item form-button">
-                        {{ form.submit(class="btn btn-lg btn-secondary btn-block") }}
+                    <div class="button-container">
+                        <div class="form-item">
+                            {{ form.submit(class="btn btn-lg btn-secondary", value="Continue") }}
+                        </div>
                     </div>
+                    
                 </form> 
             </div>
         </div>

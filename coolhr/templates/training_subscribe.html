@@ -2,51 +2,52 @@
 
 {% block content_template %}
 {% if training_available %}
-<h1>Your Company's available trainings</h1>
+<h2 class="light-font content-header">Your Company's available trainings</h2>
 {% else %}
-<h1>There's no training from your company yet</h1>
+<h2 class="light-font content-header">There's no training from your company yet</h2>
 {% endif %}
 
 <form action="{{ url_for('training_subscription', company_username=company_username) }}" method="post" novalidate>
-  <table>
+  <table class="container-fluid" style="margin: 0;">
     <tr>
       <th></th>
       <th></th>
       <th></th>
     </tr>
     {% for train in training_available %}
-    <tr>
-      <td>{{ train.training_name }}</td>
-      {% if train.training_status == True %}
-      {% if train in employee.training_subscriptions %}
-      <td><button type="submit" name="unsubscribe" value="{{ train.training_id }}">Unsubscribe</button></td>
-      {% elif train not in employee.training_subscriptions %}
-      <td><button type="submit" name="subscribe" value="{{ train.training_id }}">Subscribe</button></td>
-      {% endif %}
-      {% elif train.training_status == False %}
-      <td>Not Active</td>
-      {% endif %}
-      {% if train in employee.training_subscriptions %}
-      <td>Involved</td>
-      {% elif train not in employee.training_subscriptions %}
-      <td>Not Involved</td>
-      {% endif %}
-    </tr>
-    <tr>
-      <td colspan="3">
-        <div id="training-details{{train.training_id}}" class="collapse">
-          <div>Training Creation Date: {{train.date_created}}</div>
-          {% if train.date_completed %}
-          <div>Training Completion Date: {{train.date_completed}}</div>
-          {% endif %}
-          {% if train.training_description %}
-          <div>Training Description: {{train.training_description}}</div>
-          {% endif %}
-        </div>
-        <button type="button" class="btn btn-primary btn-block caret-toggle collapsed" data-toggle="collapse"
-          data-target="#training-details{{train.training_id}}">Details</button>
-      </td>
-    </tr>
+    <tbody class="container" style="padding: 0;">
+      <tr class="table-item">
+        <td><button style="color: #666;" class="caret-toggle collapsed" type="button" data-toggle="collapse" data-target="#training-details{{train.training_id}}"></button></td>
+        <td>{{ train.training_name }}</td>
+        {% if train.training_status == True %}
+        {% if train in employee.training_subscriptions %}
+        <td><button type="submit" name="unsubscribe" value="{{ train.training_id }}">Unsubscribe</button></td>
+        {% elif train not in employee.training_subscriptions %}
+        <td><button type="submit" name="subscribe" value="{{ train.training_id }}">Subscribe</button></td>
+        {% endif %}
+        {% elif train.training_status == False %}
+        <td>Not Active</td>
+        {% endif %}
+        {% if train in employee.training_subscriptions %}
+        <td>Involved</td>
+        {% elif train not in employee.training_subscriptions %}
+        <td>Not Involved</td>
+        {% endif %}
+      </tr>
+      <tr>
+        <td colspan="4">
+          <div id="training-details{{train.training_id}}" class="collapse container-fluid" style="padding-left: 10px; padding-right: 10px; width: -webkit-fill-available;">
+            <div>Training Creation Date: {{train.date_created}}</div>
+            {% if train.date_completed %}
+            <div>Training Completion Date: {{train.date_completed}}</div>
+            {% endif %}
+            {% if train.training_description %}
+            <div>Training Description: {{train.training_description}}</div>
+            {% endif %}
+          </div>
+        </td>
+      </tr>
+    </tbody>
     {% endfor %}
   </table>
 </form>
