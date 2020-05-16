@@ -437,18 +437,23 @@ def profile(company_username):
 
 
 def save_images(form_image, imageto_replace):
+
+    #delete former image fn if it exists in the directory and filename is not None from db
+    if imageto_replace is not None:
+        if imageto_replace != '':
+            imageto_replace_path = os.path.join(app.root_path, 'static', 'profile_images', imageto_replace)
+            if os.path.exists(imageto_replace_path):
+                os.remove(imageto_replace_path)
+
+    #upload new image fn
     random_hex = secrets.token_hex(8)
     _, f_ext = os.path.splitext(form_image.filename)
     image_fn = random_hex + f_ext
-    #upload new image fn
-    image_path = os.path.join(app.root_path, 'static/profile_images', image_fn)
-    output_size = (500, 500)
+    image_path = os.path.join(app.root_path, 'static', 'profile_images', image_fn)
+    output_size = (400, 400)
     i = Image.open(form_image)
     i.thumbnail(output_size)
     i.save(image_path)
-    #delete former image fn if it exists
-    imageto_replace_path = os.path.join(app.root_path, 'static/profile_images', imageto_replace)
-    if os.path.exists(imageto_replace_path):
-        os.remove(imageto_replace_path)
+
     return image_fn
 
