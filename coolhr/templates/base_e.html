@@ -29,11 +29,11 @@
 
         <div class="dropdown navbar2" style="height: 100%; margin-left: auto; font-size: 13px;">
             <a href="#" class="dropdown-toggle menu nav-link" data-hover="dropdown" style="height: 100%; display: flex; align-items: center;">
-                <img class="rounded-circle" style="width: 25px; margin-right: 8px;" src="{{ url_for('static', filename='profile_images/' + employee.employee_image) }}">
+                <img class="rounded-circle" style="width: 25px; height: 25px; margin-right: 8px;" src="{{ url_for('static', filename='profile_images/' + employee.employee_image) }}" alt="avatar">
                 <span>Account</span>
             </a>
             <div class="dropdown-menu" style="padding: 0; margin: 0; border: 0; border-radius: 0; right: 0; left: unset;">
-                <a class="dropdown-item" href="#">My Account</a>
+                <a class="dropdown-item" href="{{ url_for('profile', company_username=company_username) }}">My Account</a>
                 <a class="dropdown-item" href="#">Edit Account</a>
                 <a class="dropdown-item" href="{{ url_for('logout') }}">Logout</a>
             </div>
@@ -47,8 +47,8 @@
             <div style="font-size: 25px; font-weight: 300;">{{ title }}</div>
         </div>
         <div style="padding-top: 61px; font-size: 13px;">
-            {% include "_flash.html" %}
             <div class="container-fluid page-content">
+                {% include "_flash.html" %}
                 {% block content_template %} {% endblock %}
             </div>
         </div>

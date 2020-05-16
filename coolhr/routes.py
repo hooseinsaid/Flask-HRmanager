@@ -1,3 +1,6 @@
+import os
+import secrets
+from PIL import Image
 from datetime import datetime
 from flask import render_template, redirect, url_for, request, flash, session
 from coolhr import app, db, mail
@@ -44,7 +47,6 @@ def not_found_error(error):
 def internal_error(error):
     db.session.rollback()
     return render_template('500.html'), 500
-
 
 @app.route('/')
 @app.route('/index')
@@ -392,4 +394,61 @@ def training_subscription(company_username):
 @access_employee
 def profile(company_username):
     employee = Employees.query.filter_by(employee_email=session.get('employee_email')).first()
-    return render_template('base_e.html', title="Profile", employee=employee, company_username=company_username)
+    form = EmployeeUpdateProfileForm()
+    form2 = UploadImageForm()
+    if form.employee_submit.data:
+        if form.validate_on_submit():
+            if (form.employee_name.data != employee.employee_name or form.employee_surname.data != employee.employee_surname or 
+                form.employee_username.data != employee.employee_username or form.employee_email.data != employee.employee_email):
+                if form.employee_name.data != employee.employee_name:
+                    employee.employee_name = form.employee_name.data
+                if form.employee_surname.data != employee.employee_surname:
+                    employee.employee_surname = form.employee_surname.data
+                if form.employee_username.data != employee.employee_username:
+                    employee.employee_username = form.employee_username.data
+                if form.employee_email.data != employee.employee_email:
+                    employee.employee_email = form.employee_email.data
+                    session['employee_email'] = employee.employee_email
+                db.session.commit()
+                flash("Your account information has been updated",'dark')
+                return redirect(url_for('profile', company_username=company_username))
+            if (form.employee_name.data == employee.employee_name and form.employee_surname.data == employee.employee_surname and 
+                form.employee_username.data == employee.employee_username and form.employee_email.data == employee.employee_email):
+                flash('Account data not changed', 'dark')
+    elif form2.upload.data:
+        if form2.validate_on_submit():
+            old_image = employee.employee_image
+            image_file = save_images(form2.image.data, old_image)
+            employee.employee_image = image_file
+            db.session.commit()
+            flash('Image has been uploaded', 'dark')
+            return redirect(url_for('profile', company_username=company_username))
+        else:
+            form.employee_name.data = employee.employee_name
+            form.employee_surname.data = employee.employee_surname
+            form.employee_username.data = employee.employee_username
+            form.employee_email.data = employee.employee_email
+    elif request.method == 'GET':
+        form.employee_name.data = employee.employee_name
+        form.employee_surname.data = employee.employee_surname
+        form.employee_username.data = employee.employee_username
+        form.employee_email.data = employee.employee_email
+    return render_template('employee_profile.html', form=form, form2=form2, title="Profile", employee=employee, company_username=company_username)
+
+
+def save_images(form_image, imageto_replace):
+    random_hex = secrets.token_hex(8)
+    _, f_ext = os.path.splitext(form_image.filename)
+    image_fn = random_hex + f_ext
+    #upload new image fn
+    image_path = os.path.join(app.root_path, 'static/profile_images', image_fn)
+    output_size = (500, 500)
+    i = Image.open(form_image)
+    i.thumbnail(output_size)
+    i.save(image_path)
+    #delete former image fn if it exists
+    imageto_replace_path = os.path.join(app.root_path, 'static/profile_images', imageto_replace)
+    if os.path.exists(imageto_replace_path):
+        os.remove(imageto_replace_path)
+    return image_fn
+

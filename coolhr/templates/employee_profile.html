@@ -1,0 +1,84 @@
+{% extends "base_e.html" %}
+
+{% block content_template %}
+    {{employee.employee_name}}
+    {{employee.employee_surname}}
+    {{employee.employee_email}}
+    {{employee.employee_username}}
+    <div class="edit-form">
+        <form action="" method="post" enctype="multipart/form-data" novalidate>
+            {{ form.hidden_tag() }}
+            <div class="form-item">
+                {{ form2.image.label() }}
+                {{ form2.image(class="form-control-file") }}
+                {% for error in form2.image.errors %}
+                    <span class="not-valid">{{ error }}</span>
+                {% endfor %}
+            </div>
+
+            <div class="button-container">
+                <div class="form-item">
+                    {{ form2.upload(class="btn btn-lg btn-secondary") }}
+                </div> 
+            </div>
+        </form>
+
+        <form action="" method="post" novalidate>
+            {{ form.hidden_tag() }}
+
+            <div class="form-item">
+                {{ form.employee_name.label(class="sr-only") }}
+                {% if form.employee_name.errors %}
+                    {{ form.employee_name(placeholder="Name", class="form-control is-invalid") }}
+                    {% for error in form.employee_name.errors %}
+                    <span class="not-valid">{{ error }}</span>
+                    {% endfor %}
+                {% else %}
+                    {{ form.employee_name(placeholder="Name", class="form-control") }}
+                {% endif %}
+            </div>
+        
+            <div class="form-item">
+                {{ form.employee_surname.label(class="sr-only") }}
+                {% if form.employee_surname.errors %}
+                    {{ form.employee_surname(placeholder="Surname", class="form-control is-invalid") }}
+                    {% for error in form.employee_surname.errors %}
+                    <span class="not-valid">{{ error }}</span>
+                    {% endfor %}
+                {% else %}
+                    {{ form.employee_surname(placeholder="Surname", class="form-control") }}
+                {% endif %}
+            </div>
+
+            <div class="form-item">
+                {{ form.employee_username.label(class="sr-only") }}
+                {% if form.employee_username.errors %}
+                    {{ form.employee_username(placeholder="Username", class="form-control is-invalid") }}
+                    {% for error in form.employee_username.errors %}
+                    <span class="not-valid">{{ error }}</span>
+                    {% endfor %}
+                {% else %}
+                    {{ form.employee_username(placeholder="Username", class="form-control") }}
+                {% endif %}
+            </div>
+
+            <div class="form-item">
+                {{ form.employee_email.label(class="sr-only") }}
+                {% if form.employee_email.errors %}
+                    {{ form.employee_email(placeholder="Email", class="form-control is-invalid") }}
+                    {% for error in form.employee_email.errors %}
+                    <span class="not-valid">{{ error }}</span>
+                    {% endfor %}
+                {% else %}
+                    {{ form.employee_email(placeholder="Email", class="form-control") }}
+                {% endif %} 
+            </div>
+
+            <div class="button-container">
+                <div class="form-item">
+                    {{ form.employee_submit(class="btn btn-lg btn-secondary") }}
+                </div> 
+            </div>
+        </form>
+    </div>
+{% endblock %}
