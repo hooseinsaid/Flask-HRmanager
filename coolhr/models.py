@@ -27,6 +27,7 @@ class Companies(db.Model):
     def check_password(self, password):
         return check_password_hash(self.company_password_hash, password)
 
+    #just use as a generic token to be applied to account verification and reset password
     def get_reset_password_token(self, expires_in=600):
         return jwt.encode({'reset_password': self.company_username, 'exp': time() + expires_in},
             app.config['SECRET_KEY'], algorithm='HS256').decode('utf-8')

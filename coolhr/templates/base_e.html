@@ -9,19 +9,19 @@
       
         <div class="collapse navbar-collapse" id="navbarCollapse" style="height: 100%; font-size: 13px;">
             <ul class="navbar-nav mr-auto sidenav" id="navAccordion">
-                <li class="nav-item">
+                <li class="nav-item" id="{{url_for('training_subscription', company_username=company_username)}}">
                     <a class="nav-link" href="{{url_for('training_subscription', company_username=company_username)}}">Trainings</a>
                 </li>
 
-                <li class="nav-item">
+                <li class="nav-item" id="navigationitem2">
                     <a class="nav-link" href="#">Item 2</a>
                 </li>
 
-                <li class="nav-item">
+                <li class="nav-item" id="navigationitem3">
                     <a class="nav-link" href="#">Item 3</a>
                 </li>
 
-                <li class="nav-item">
+                <li class="nav-item" id="navigationitem4">
                     <a class="nav-link" href="#">Item 4</a>
                 </li>
             </ul>
@@ -31,8 +31,6 @@
             <a href="#" class="dropdown-toggle menu nav-link" data-hover="dropdown" style="height: 100%; display: flex; align-items: center;">
                 {% if employee.employee_image %}
                 <img class="rounded-circle" style="width: 25px; height: 25px; margin-right: 8px;" src="{{ url_for('static', filename='profile_images/' + employee.employee_image) }}" alt="{{ employee.employee_username }}">
-                {% else %}
-                <img class="rounded-circle" style="width: 25px; height: 25px; margin-right: 8px;" src="" alt="avatar">
                 {% endif %}
                 <span>Account</span>
             </a>
@@ -69,9 +67,19 @@
     </script>
 
     <script>
-        $( 'ul.navbar-nav li' ).on( 'click', function () {
-	        $( 'ul.navbar-nav li' ).removeClass( 'active' );
-	        $( this ).addClass( 'active' );
+        $(document).ready(function(){
+            $( 'ul.navbar-nav li' ).on( 'click', function () {
+                $( 'ul.navbar-nav li' ).removeClass( 'active' );
+                //remove the below later
+                $( this ).addClass( 'active' );
+            });
+            var str = window.location.pathname;
+            $("ul.navbar-nav #" + $.escapeSelector(str)).addClass( 'active' );
         });
     </script>
+
+{% block etemp_script %}{% endblock %}
+
 {% endblock %}
+
+

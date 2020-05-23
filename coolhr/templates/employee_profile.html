@@ -6,20 +6,39 @@
     {{employee.employee_email}}
     {{employee.employee_username}}
     <div class="edit-form">
-        <form action="" method="post" enctype="multipart/form-data" novalidate>
+        <form id="form2" action="" method="post" enctype="multipart/form-data" novalidate>
             {{ form.hidden_tag() }}
             <div class="form-item">
-                {{ form2.image.label() }}
-                {{ form2.image(class="form-control-file") }}
-                {% for error in form2.image.errors %}
-                    <span class="not-valid">{{ error }}</span>
-                {% endfor %}
+                {% if form2.image.errors %}
+                    {% for error in form2.image.errors %}
+                        <span class="not-valid">{{ error }}</span><br>
+                    {% endfor %}
+                {% else %}
+                    <span id="mySpan" class="not-valid"></span><br>
+                {% endif %}
+                {{ form2.image.label(for="upload", class="btn btn-secondary", onclick="resetForm()") }}
+                {{ form2.image(class="form-control-file", id="upload", style="display:none;")}}
             </div>
 
-            <div class="button-container">
-                <div class="form-item">
-                    {{ form2.upload(class="btn btn-lg btn-secondary") }}
-                </div> 
+            <div class="modal fade" id="myModal">
+                <div class="modal-dialog modal-dialog-centered" style="max-width: fit-content;">
+                    <div class="modal-content">
+
+                        <div class="modal-header">
+                            <h4 class="modal-title" style="font-size: 14px; font-weight: 600;">Crop your new profile picture</h4>
+                            <button type="button" class="close close-button" data-dismiss="modal" style="outline: none">&times;</button>
+                        </div>
+
+                        <div class="modal-body" style="max-height: 430px; overflow: auto;">
+                            <img id="preview" width="400px" alt="image preview"/>
+                        </div>
+
+                        <div class="modal-footer">
+                            {{ form2.upload(id="pictureUpload", class="btn btn-lg btn-secondary btn-block") }}
+                        </div>
+
+                    </div>
+                </div>
             </div>
         </form>
 
@@ -81,4 +100,33 @@
             </div>
         </form>
     </div>
+{% endblock %}
+
+{% block etemp_script %}
+<script>
+    $('#upload').change(function () {
+        const validImageTypes = ['image/jpeg', 'image/png'];
+        if (this.files[0].size/1024/1024 < 10) {
+            localStorage.clear();
+            if (!validImageTypes.includes(this.files[0]['type'])) {
+                document.getElementById('pictureUpload').click();
+            }
+            else {
+                document.getElementById('preview').src = window.URL.createObjectURL(this.files[0])
+                $("#myModal").modal('show');
+            } 
+        }
+        else {
+            localStorage.setItem('spanMessage', 'Please upload a file smaller than 10MB');
+            window.location.replace(window.location.href);
+        }
+    });
+    document.getElementById('mySpan').innerHTML = localStorage.getItem('spanMessage')
+</script>
+
+<script>
+    function resetForm() {
+        document.getElementById("form2").reset();
+    }
+</script>
 {% endblock %}

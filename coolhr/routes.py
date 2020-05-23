@@ -173,7 +173,7 @@ def reset_password_request():
             send_password_reset_email(company)
         elif employee:
             send_password_reset_email(employee)
-        flash('Check your email for the instructions to reset your password', 'dark')
+        flash('Check your email for instructions on how to reset your password', 'dark')
     return render_template('reset_password_request.html', title='Reset Password', form=form, alert_type='form-alert')
 
 
@@ -410,18 +410,18 @@ def profile(company_username):
                     employee.employee_email = form.employee_email.data
                     session['employee_email'] = employee.employee_email
                 db.session.commit()
-                flash("Your account information has been updated",'dark')
+                flash("Your account information has been updated",'success')
                 return redirect(url_for('profile', company_username=company_username))
             if (form.employee_name.data == employee.employee_name and form.employee_surname.data == employee.employee_surname and 
                 form.employee_username.data == employee.employee_username and form.employee_email.data == employee.employee_email):
-                flash('Account data not changed', 'dark')
+                flash('Account data has not been changed', 'warning')
     elif form2.upload.data:
         if form2.validate_on_submit():
             old_image = employee.employee_image
             image_file = save_images(form2.image.data, old_image)
             employee.employee_image = image_file
             db.session.commit()
-            flash('Image has been uploaded', 'dark')
+            flash('Image has been uploaded', 'success')
             return redirect(url_for('profile', company_username=company_username))
         else:
             form.employee_name.data = employee.employee_name

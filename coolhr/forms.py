@@ -119,6 +119,6 @@ class EmployeeUpdateProfileForm(FlaskForm):
                 raise ValidationError('Email is already taken. Please choose a different one')
 
 class UploadImageForm(FlaskForm):
-    image = FileField('Update Profile Picture', validators=[DataRequired(), FileAllowed(['jpg', 'jpeg', 'png'])])
-    upload = SubmitField('Upload')
+    image = FileField('Upload a photo...', validators=[DataRequired(), FileAllowed(['jpg', 'png'], "We only support JPG or PNG pictures.")])
+    upload = SubmitField('Set new profile picture')
 

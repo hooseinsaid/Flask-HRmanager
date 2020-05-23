@@ -13,7 +13,6 @@
         <div class="modal-dialog modal-dialog-centered" style="max-width: fit-content;">
             <div class="modal-content" style="border-radius: .9rem; padding: 0 40px 40px 40px;" >
 
-                <!-- <button type="button" style="width: fit-content; align-self: flex-end;" class="close" data-dismiss="modal">&times;</button> -->
                 <div class="modal-body align-self-center" style="padding: 0;">
                     <div class="title">Choose your role</div>
                     <div class="subtitle">Create a company or an employee account?</div>
@@ -22,7 +21,7 @@
                         <div class="selection">
                             <input type="radio" value="{{ url_for('company_signup') }}" id="company-radio" name="selector" class="input-hidden"/>
                             <label for="company-radio">
-                                <img class="selection-img" style="filter: opacity(80%)" src="{{ url_for('static', filename='icons/company.svg') }}">
+                                <img class="selection-img" style="filter: opacity(80%)" src="{{ url_for('static', filename='icons/company.svg') }}"/>
                                 <div class="text-center">Company</div>
                             </label>
                         </div>
