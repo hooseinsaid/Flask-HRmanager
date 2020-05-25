@@ -83,7 +83,7 @@ a.menu {
   z-index: 9;
 }
 
-@media (max-width: 992px) {
+@media (max-width: 768px) {
   .dropdown.navbar2 {
     -ms-flex-preferred-size: 100%;
     flex-basis: 100%;
@@ -98,7 +98,7 @@ a.menu {
   }
 }
 
-@media (min-width: 992px) {
+@media (min-width: 768px) {
   .sidenav {
     position: absolute;
     top: 0;
@@ -114,11 +114,11 @@ a.menu {
     width: calc(100% - 230px);
   }
 
-  .navbar-expand-lg .sidenav {
+  .navbar-expand-md .sidenav {
     flex-direction: column;
   }
 
-  .navbar-expand-lg {
+  .navbar-expand-md {
     height: 56px;
     padding: 0;
   }
@@ -410,4 +410,7 @@ input[type=radio] + label {
 
 .auth-form .form-control:focus {
   z-index: 2;
+  outline: 0;
+  box-shadow: inset 0 0 3px 0.01rem rgba(0, 123, 255, 0.123);
+  background-color: #80bdff15
 }
