@@ -29,8 +29,10 @@
 
         <div class="dropdown navbar2" style="height: 100%; margin-left: auto; font-size: 13px;">
             <a href="#" class="dropdown-toggle menu nav-link" data-hover="dropdown" style="height: 100%; display: flex; align-items: center;">
-                {% if employee.employee_image %}
+                {% if employee.employee_image != "default.png" %}
                 <img class="rounded-circle" style="width: 25px; height: 25px; margin-right: 8px;" src="{{ url_for('static', filename='profile_images/avatars/' + employee.employee_image) }}" alt="{{ employee.employee_username }}">
+                {% elif employee.employee_image == "default.png" %}
+                <img class="rounded-circle" style="width: 25px; height: 25px; margin-right: 8px;" src="{{ url_for('static', filename='profile_images/' + employee.employee_image) }}" alt="{{ employee.employee_username }}">
                 {% endif %}
                 <span>Account</span>
             </a>
