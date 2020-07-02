@@ -1,28 +1,66 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h1>Sign In</h1>
-    <form action="" method="post" novalidate>
-        {{ form.hidden_tag() }}
-        <p>
-            {{ form.email.label }}<br>
-            {{ form.email(size=32) }}<br>
-            {% for error in form.email.errors %}
-            <span style="color: red;">{{ error }}</span>
-            {% endfor %}
-        </p>
-        <p>
-            {{ form.password.label }}<br>
-            {{ form.password(size=32) }}<br>
-            {% for error in form.password.errors %}
-            <span style="color: red;">{{ error }}</span>
-            {% endfor %}
-        </p>
-        <p>{{ form.submit() }}</p>
-    </form>
-    <p>New User? <a href="{{ url_for('employeeregister', company_username=company_username) }}">Click to Register!</a></p>
-    <p>
-        Forgot Your Password?
-        <a href="{{ url_for('reset_password_request') }}">Click to Reset It</a>
-    </p>
+    <div class="form-body">
+        <div class="wrapper">
+            <!-- <div class="jumbotron jumbotron-fluid" style="width: 100%; max-width: 440px;">
+                <div class="container">
+                    <h2 class="text-center">{{ company_username|upper }}</h2>
+                    <div class="subtitle text-center">Sign up as a <em><strong>{{ company_username }}</strong></em> employee here</div>
+                </div>
+            </div> -->
+            
+            <h2 class="text-center">{{ company_username|upper }}</h2>
+            <div class="auth-container">
+                <div class="auth-tab-header">
+                    <ul class="list-unstyled">
+                        <li class=" tab-item float-left">
+                            <h6 class="h4 auth-form-header font-weight-normal">LOGIN</h6> 
+                        </li>
+                        <li class="tab-item float-right align-right">
+                            <a href="{{ url_for('employeeregister', company_username=company_username) }}">
+                                <button class="btn btn-outline-secondary float-right tab-item-button">SIGN UP</button>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="auth-form">
+                    <form action="" method="post" novalidate>
+                        {{ form.hidden_tag() }}
+                        
+                        {% include "_flash.html" %}
+
+                        <div class="form-item">
+                            {{ form.email.label(class="sr-only", for="inputEmail") }}
+                            {{ form.email(placeholder="Email address", class="form-control", type="email", id="inputEmail") }}
+                            {% for error in form.email.errors %}
+                            <hr class="not-valid-border">
+                            <span class="not-valid">{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                        
+                        <div class="form-item">
+                            {{ form.password.label(class="sr-only", for="inputPassword") }}
+                            {{ form.password(placeholder="Password", class="form-control", type="password", id="inputPassword") }}
+                            {% for error in form.password.errors %}
+                            <hr class="not-valid-border">
+                            <span class="not-valid">{{ error }}</span>
+                            {% endfor %} 
+                        </div>
+
+                        <div class="form-item float-right" style="margin-top: 10px; margin-bottom: 20px;">
+                            <a href="{{ url_for('reset_password_request') }}">Forgot Your Password?</a>
+                        </div> 
+
+                        <div class="button-container">
+                           <div class="form-item">
+                                {{ form.submit(class="btn btn-lg btn-secondary") }}
+                            </div> 
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}

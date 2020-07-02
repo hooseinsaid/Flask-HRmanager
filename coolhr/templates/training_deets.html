@@ -23,12 +23,13 @@
             <span style="color: red;">{{ error }}</span>
             {% endfor %}
         </p>
-        <p>{{ form.training_submit() }}</p>
+        <p>{{ form.training_submit(value="Save Changes") }}</p>
         {% endif %}
     </form>
 
     <h1>Add/Remove Employees to/from training {{ training.training_name }}</h1>
-    <form action="{{ url_for('trainings_deets', company_username=company_username) }}?v={{ training.training_name }}" method="post" novalidate>
+    <form action="{{ url_for('trainings_deets', company_username=company.company_username, v=training.training_name) }}" method="post" novalidate>
+        {{ form.hidden_tag() }}
         <p>
             <table>
                 <tr>
@@ -55,7 +56,7 @@
                   {% endif %}
                 </tr>
                 {% endfor %}
-              </table>
+            </table>
         </p>
     </form>
 {% endblock %}

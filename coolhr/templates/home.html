@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+
+{% block navigation %}
+    <div>
+        CoolHR:
+        <a data-toggle="modal" data-target="#myModal" href="#">Create Account</a>
+        <a href="{{ url_for('company_username') }}">Sign in</a>
+    </div> 
+{% endblock %}
+
+{% block content %}
+    <div class="modal fade" id="myModal">
+        <div class="modal-dialog modal-dialog-centered" style="max-width: fit-content;">
+            <div class="modal-content" style="border-radius: .9rem; padding: 0 40px 40px 40px;" >
+
+                <div class="modal-body align-self-center" style="padding: 0;">
+                    <div class="title">Choose your role</div>
+                    <div class="subtitle">Create a company or an employee account?</div>
+                    <div class="role-selector">
+                        
+                        <div class="selection">
+                            <input type="radio" value="{{ url_for('company_signup') }}" id="company-radio" name="selector" class="input-hidden"/>
+                            <label for="company-radio">
+                                <img class="selection-img" style="filter: opacity(80%)" src="{{ url_for('static', filename='icons/company.svg') }}"/>
+                                <div class="text-center">Company</div>
+                            </label>
+                        </div>
+                        
+                        <div class="selection">
+                            <input type="radio" value="{{ url_for('company_username') }}" id="employee-radio" name="selector" class="input-hidden"/>
+                            <label for="employee-radio">
+                                <img class="selection-img" style="filter: opacity(80%)" src="{{ url_for('static', filename='icons/employee2.svg') }}">
+                                <div class="text-center">Employee</div>
+                            </label>
+                        </div>
+                        
+                    </div>
+                    <button type="button" style="border-radius: 98px; margin: 24px 16px;" id="postSelection" class="btn btn-secondary btn-block-selector" onclick="redirect()" disabled>Continue</button>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block script %}
+    <script>
+        $("input:radio").change(function () {$("#postSelection").prop("disabled", false);});
+    </script>
+    
+    <script>
+        function redirect() {  
+            var checkRadio = document.querySelector('input[name="selector"]:checked');
+            if(checkRadio.id == "company-radio") {
+                $(location).attr('href', checkRadio.value);
+            } 
+            else if (checkRadio.id == "employee-radio") {
+                $(location).attr('href', checkRadio.value);
+            } 
+        } 
+    </script>
+{% endblock %}

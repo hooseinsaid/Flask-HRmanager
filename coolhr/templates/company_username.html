@@ -1,20 +1,37 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h1>Enter your Company's username to continue to login</h1>
-    <form action="" method="post" novalidate>
-        {{ form.hidden_tag() }}
-        <p>
-            {{ form.company_username.label }}<br>
-            {{ form.company_username(size=32) }}<br>
-            {% for error in form.company_username.errors %}
-            <span style="color: red;">{{ error }}</span>
-            {% endfor %}
-        </p>
-        <p>{{ form.submit() }}</p>
-    </form>
-    <p>
-        Forgot Your Company's username?
-        <a href="{{ url_for('recover_company_username') }}">Click to Recover It</a>
-    </p>
+<div class="form-body">
+    <div class="wrapper">
+        <div class="auth-container">
+            <h6 class="h4 auth-form-header font-weight-normal">COMPANY USERNAME</h6> 
+            <div class="auth-form">
+                <form action="" method="post" novalidate>
+                    {{ form.hidden_tag() }}
+
+                    {% include "_flash.html" %}
+
+                    <div class="form-item">
+                        {{ form.company_username.label(class="sr-only") }}
+                        {{ form.company_username(placeholder="Enter your company's username", class="form-control") }}
+                        {% for error in form.company_username.errors %}
+                        <hr class="not-valid-border">
+                        <span class="not-valid">{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                    
+                    <div class="form-item float-right" style="margin-top: 10px; margin-bottom: 20px;">
+                        <a href="{{ url_for('recover_company_username') }}">Forgot Your Company's username?</a>
+                    </div> 
+
+                    <div class="button-container">
+                        <div class="form-item">
+                            {{ form.submit(class="btn btn-lg btn-secondary") }}
+                        </div>
+                    </div>
+                </form> 
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}

@@ -13,7 +13,7 @@ app.config.update(
     MAIL_USE_TLS = True,
     MAIL_USERNAME = 'noreply.coolhr@gmail.com',
     MAIL_PASSWORD = 'Helloitsme',
-    ADMINS = ['noreply.coolhr@gmail.com']
+    ADMINS = ['CoolHR']
 )
 mail = Mail(app)
 db: SQLAlchemy = SQLAlchemy(app)

@@ -27,6 +27,7 @@ class Companies(db.Model):
     def check_password(self, password):
         return check_password_hash(self.company_password_hash, password)
 
+    #just use as a generic token to be applied to account verification and reset password
     def get_reset_password_token(self, expires_in=600):
         return jwt.encode({'reset_password': self.company_username, 'exp': time() + expires_in},
             app.config['SECRET_KEY'], algorithm='HS256').decode('utf-8')
@@ -46,6 +47,7 @@ class Employees(db.Model):
     employee_username = db.Column(db.String(64), index=True, unique=True)
     employee_email = db.Column(db.String(64), index=True, unique=True)
     employee_password_hash = db.Column(db.String(128))
+    employee_image = db.Column(db.String(64), default="default.png")
     company_id = db.Column(db.Integer, db.ForeignKey('companies.company_id'))
     training_subscriptions = db.relationship('Trainings', secondary=employee_trainings, backref=db.backref('subscribers', lazy='dynamic'))
 
@@ -76,6 +78,8 @@ class Trainings(db.Model):
     training_description = db.Column(db.String(1024))
     training_status = db.Column(db.Boolean, default=True)
     company_id = db.Column(db.Integer, db.ForeignKey('companies.company_id'))
+    date_created = db.Column(db.DateTime)
+    date_completed = db.Column(db.DateTime)
 
     def __repr__(self):
         return '<Training {}>'.format(self.training_name)

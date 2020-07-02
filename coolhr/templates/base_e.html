@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+
+{% block navigation %}
+    <nav class="navbar navbar-expand-md navbar-dark fixed-top" style="padding: 0; background: #1e1e1e;">
+        <a class="navbar-brand" style="margin: .5rem 1rem;" href="#">Logo Here</a>
+        <button class="navbar-toggler" style="margin: .5rem 1rem;" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+      
+        <div class="collapse navbar-collapse" id="navbarCollapse" style="height: 100%; font-size: 13px;">
+            <ul class="navbar-nav mr-auto sidenav" id="navAccordion">
+                <li class="nav-item" id="{{url_for('training_subscription', company_username=company_username)}}">
+                    <a class="nav-link" href="{{url_for('training_subscription', company_username=company_username)}}">Trainings</a>
+                </li>
+
+                <li class="nav-item" id="navigationitem2">
+                    <a class="nav-link" href="#">Item 2</a>
+                </li>
+
+                <li class="nav-item" id="navigationitem3">
+                    <a class="nav-link" href="#">Item 3</a>
+                </li>
+
+                <li class="nav-item" id="navigationitem4">
+                    <a class="nav-link" href="#">Item 4</a>
+                </li>
+            </ul>
+        </div>
+
+        <div class="dropdown navbar2" style="height: 100%; margin-left: auto; font-size: 13px;">
+            <a href="#" class="dropdown-toggle menu nav-link" data-hover="dropdown" style="height: 100%; display: flex; align-items: center;">
+                {% if employee.employee_image != "default.png" %}
+                <img class="rounded-circle" style="width: 25px; height: 25px; margin-right: 8px;" src="{{ url_for('static', filename='profile_images/avatars/' + employee.employee_image) }}" alt="{{ employee.employee_username }}">
+                {% elif employee.employee_image == "default.png" %}
+                <img class="rounded-circle" style="width: 25px; height: 25px; margin-right: 8px;" src="{{ url_for('static', filename='profile_images/' + employee.employee_image) }}" alt="{{ employee.employee_username }}">
+                {% endif %}
+                <span>Account</span>
+            </a>
+            <div class="dropdown-menu" style="padding: 0; margin: 0; border: 0; border-radius: 0; right: 0; left: unset;">
+                <a class="dropdown-item" href="{{ url_for('profile', company_username=company_username) }}">My Account</a>
+                <a class="dropdown-item" href="#">Edit Account</a>
+                <a class="dropdown-item" href="{{ url_for('logout') }}">Logout</a>
+            </div>
+        </div>
+    </nav>
+{% endblock %}
+
+{% block content %}
+    <main class="content-wrapper">
+        <div class="page-title-breadcrumb">
+            <div style="font-size: 25px; font-weight: 300;">{{ title }}</div>
+        </div>
+        <div style="padding-top: 61px; font-size: 13px;">
+            <div class="container-fluid page-content">
+                {% include "_flash.html" %}
+                {% block content_template %} {% endblock %}
+            </div>
+        </div>
+    </main>
+{% endblock %}
+
+{% block script %}
+    <script>
+        $('nav.navbar .dropdown.navbar2').hover(function() {
+            $(this).find('.dropdown-menu').stop(true, true).fadeIn(200);
+        },  function() {
+                $(this).find('.dropdown-menu').stop(true, true).fadeOut(200);
+            });
+    </script>
+
+    <script>
+        $(document).ready(function(){
+            $( 'ul.navbar-nav li' ).on( 'click', function () {
+                $( 'ul.navbar-nav li' ).removeClass( 'active' );
+                //remove the below later
+                $( this ).addClass( 'active' );
+            });
+            var str = window.location.pathname;
+            $("ul.navbar-nav #" + $.escapeSelector(str)).addClass( 'active' );
+        });
+    </script>
+
+{% block etemp_script %}{% endblock %}
+
+{% endblock %}
+
+

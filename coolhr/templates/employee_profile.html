@@ -1,0 +1,151 @@
+{% extends "base_e.html" %}
+
+{% block content_template %}
+    <div class="edit-form">
+        <div class="row">
+            <div class="col-lg-3" style="width: auto;">
+                <div class="form-group">
+                    <div class="text-center">
+                        {% if employee.employee_image != "default.png" %}
+                        <img class="img-fluid" src="{{ url_for('static', filename='profile_images/avatars/' + employee.employee_image) }}" alt="{{ employee.employee_username }}">
+                        {% elif employee.employee_image == "default.png" %}
+                        <img class="img-fluid" src="{{ url_for('static', filename='profile_images/' + employee.employee_image) }}" alt="{{ employee.employee_username }}">
+                        {% endif %}
+                    </div>
+
+                    <div class="text-center">
+                        <form id="form2" action="" method="post" enctype="multipart/form-data" novalidate>
+                            {{ form.hidden_tag() }}
+                            <div class="form-item">
+                                {% if form2.image.errors %}
+                                    {% for error in form2.image.errors %}
+                                        <span class="not-valid">{{ error }}</span><br>
+                                    {% endfor %}
+                                {% else %}
+                                    <span id="mySpan" class="not-valid"></span><br>
+                                {% endif %}
+                                {{ form2.image.label(for="upload", class="btn btn-secondary", onclick="resetForm()") }}
+                                {{ form2.image(class="form-control-file", id="upload", style="display:none;")}}
+                            </div>
+
+                            <div class="modal fade" id="myModal">
+                                <div class="modal-dialog modal-dialog-centered" style="max-width: 400px; margin: 1.75rem auto;">
+                                    <div class="modal-content" style="margin: .5rem;">
+
+                                        <div class="modal-header">
+                                            <h4 class="modal-title" style="font-size: 14px; font-weight: 600;">Crop your new profile picture</h4>
+                                            <button type="button" class="close close-button" data-dismiss="modal" style="outline: none">&times;</button>
+                                        </div>
+
+                                        <div class="modal-body" style="max-height: 430px; overflow: auto;">
+                                            <img id="preview" width="100%" alt="image preview"/>
+                                        </div>
+
+                                        <div class="modal-footer">
+                                            {{ form2.upload(id="pictureUpload", class="btn btn-lg btn-secondary btn-block") }}
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                {{employee.employee_name}}
+                {{employee.employee_surname}}
+                {{employee.employee_email}}
+                {{employee.employee_username}}
+            </div>
+
+            <div class="col-lg-9">
+                <form action="" method="post" novalidate>
+                    {{ form.hidden_tag() }}
+
+                    <div class="form-item">
+                        {{ form.employee_name.label(class="sr-only") }}
+                        {% if form.employee_name.errors %}
+                            {{ form.employee_name(placeholder="Name", class="form-control is-invalid") }}
+                            {% for error in form.employee_name.errors %}
+                            <span class="not-valid">{{ error }}</span>
+                            {% endfor %}
+                        {% else %}
+                            {{ form.employee_name(placeholder="Name", class="form-control") }}
+                        {% endif %}
+                    </div>
+                
+                    <div class="form-item">
+                        {{ form.employee_surname.label(class="sr-only") }}
+                        {% if form.employee_surname.errors %}
+                            {{ form.employee_surname(placeholder="Surname", class="form-control is-invalid") }}
+                            {% for error in form.employee_surname.errors %}
+                            <span class="not-valid">{{ error }}</span>
+                            {% endfor %}
+                        {% else %}
+                            {{ form.employee_surname(placeholder="Surname", class="form-control") }}
+                        {% endif %}
+                    </div>
+
+                    <div class="form-item">
+                        {{ form.employee_username.label(class="sr-only") }}
+                        {% if form.employee_username.errors %}
+                            {{ form.employee_username(placeholder="Username", class="form-control is-invalid") }}
+                            {% for error in form.employee_username.errors %}
+                            <span class="not-valid">{{ error }}</span>
+                            {% endfor %}
+                        {% else %}
+                            {{ form.employee_username(placeholder="Username", class="form-control") }}
+                        {% endif %}
+                    </div>
+
+                    <div class="form-item">
+                        {{ form.employee_email.label(class="sr-only") }}
+                        {% if form.employee_email.errors %}
+                            {{ form.employee_email(placeholder="Email", class="form-control is-invalid") }}
+                            {% for error in form.employee_email.errors %}
+                            <span class="not-valid">{{ error }}</span>
+                            {% endfor %}
+                        {% else %}
+                            {{ form.employee_email(placeholder="Email", class="form-control") }}
+                        {% endif %} 
+                    </div>
+
+                    <div class="button-container">
+                        <div class="form-item">
+                            {{ form.employee_submit(class="btn btn-lg btn-secondary") }}
+                        </div> 
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block etemp_script %}
+<script>
+    $('#upload').change(function () {
+        const validImageTypes = ['image/jpeg', 'image/png'];
+        if (this.files[0].size/1024/1024 < 10) {
+            if (!validImageTypes.includes(this.files[0]['type'])) {
+                document.getElementById('pictureUpload').click();
+            }
+            else {
+                document.getElementById('preview').src = window.URL.createObjectURL(this.files[0])
+                $("#myModal").modal('show');
+            } 
+        }
+        else {
+            localStorage.setItem('spanMessage', 'Please upload a file smaller than 10MB');
+            window.location.replace(window.location.href);
+        }
+    });
+    document.getElementById('mySpan').innerHTML = localStorage.getItem('spanMessage')
+    localStorage.clear();
+</script>
+
+<script>
+    function resetForm() {
+        document.getElementById("form2").reset();
+    }
+</script>
+{% endblock %}
