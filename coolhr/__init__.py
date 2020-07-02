@@ -16,7 +16,7 @@ app.config.update(
     ADMINS = ['noreply.coolhr@gmail.com']
 )
 mail = Mail(app)
-db = SQLAlchemy(app)
+db: SQLAlchemy = SQLAlchemy(app)
 migrate = Migrate(app, db)
 
 from coolhr import routes
