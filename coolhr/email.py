@@ -23,12 +23,9 @@ def send_password_reset_email(user):
                                          user=user, token=token),
                html_body=render_template('email/reset_password.html',
                                          user=user, token=token))
-<<<<<<< HEAD
-=======
 
 def send_company_welcome_email(user):
     email = user.company_email
     send_email('Welcome to CoolHR', sender=app.config['ADMINS'][0], recipients=[email],
                 text_body=render_template('email/welcome.txt', user=user),
                 html_body=render_template('email/welcome.html', user=user))
->>>>>>> c7b35d309bea91808da0c8eaee23fab15e65e6d5
