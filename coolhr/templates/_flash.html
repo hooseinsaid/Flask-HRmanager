@@ -4,7 +4,7 @@
                 {% for category, message in messages %}
                     {% if alert_type != 'form-alert' %}
                         <div class="alert custom-alert alert-{{ category }} alert-dismissible" role="alert">
-                            <button type="button" class="close" style="padding: .5rem 1rem; outline: 0;" data-dismiss="alert">&times;</button>
+                            <button type="button" class="close" style="padding: .5rem 1rem;" data-dismiss="alert">&times;</button>
                             <li>{{ message|safe }}</li>
                         </div>
                     {% elif alert_type == 'form-alert' %}

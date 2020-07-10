@@ -17,16 +17,16 @@
     {% for train in training_available %}
     <tbody class="container" style="padding: 0;">
       <tr class="table-item">
-        <td><button style="border-radius: .2rem;" class="btn btn-sm btn-info caret-toggle collapsed" type="button" data-toggle="collapse" data-target="#training-details{{train.training_id}}"></button></td>
+        <td><button style="color: #666;" class="caret-toggle collapsed" type="button" data-toggle="collapse" data-target="#training-details{{train.training_id}}"></button></td>
         <td>{{ train.training_name }}</td>
         {% if train.training_status == True %}
         {% if train in employee.training_subscriptions %}
-        <td><button style="border-radius: .2rem;" class="btn btn-sm btn-outline-danger" type="submit" name="unsubscribe" value="{{ train.training_id }}">Unsubscribe</button></td>
+        <td><button type="submit" name="unsubscribe" value="{{ train.training_id }}">Unsubscribe</button></td>
         {% elif train not in employee.training_subscriptions %}
-        <td><button style="border-radius: .2rem;" class="btn btn-sm btn-outline-success" type="submit" name="subscribe" value="{{ train.training_id }}">Subscribe</button></td>
+        <td><button type="submit" name="subscribe" value="{{ train.training_id }}">Subscribe</button></td>
         {% endif %}
         {% elif train.training_status == False %}
-        <td><button style="border-radius: .2rem;" class="btn btn-sm btn-outline-info" disabled>Not Active</button></td>
+        <td>Not Active</td>
         {% endif %}
         {% if train in employee.training_subscriptions %}
         <td>Involved</td>

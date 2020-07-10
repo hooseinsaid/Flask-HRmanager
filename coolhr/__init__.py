@@ -12,7 +12,7 @@ app.config.update(
     MAIL_PORT = 587,
     MAIL_USE_TLS = True,
     MAIL_USERNAME = 'noreply.coolhr@gmail.com',
-    MAIL_PASSWORD = 'Helloitwasme',
+    MAIL_PASSWORD = 'Helloitsme',
     ADMINS = ['CoolHR']
 )
 mail = Mail(app)
