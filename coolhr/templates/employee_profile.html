@@ -6,10 +6,10 @@
             <div class="col-lg-3" style="width: auto;">
                 <div class="form-group">
                     <div class="text-center">
-                        {% if employee.employee_image != "default.png" %}
+                        {% if employee.employee_image == "default.png" or employee.employee_image == none %}
+                        <img class="img-fluid" src="{{ url_for('static', filename='profile_images/default.png') }}" alt="{{ employee.employee_username }}">
+                        {% elif employee.employee_image != "default.png" %}
                         <img class="img-fluid" src="{{ url_for('static', filename='profile_images/avatars/' + employee.employee_image) }}" alt="{{ employee.employee_username }}">
-                        {% elif employee.employee_image == "default.png" %}
-                        <img class="img-fluid" src="{{ url_for('static', filename='profile_images/' + employee.employee_image) }}" alt="{{ employee.employee_username }}">
                         {% endif %}
                     </div>
 
@@ -25,7 +25,7 @@
                                     <span id="mySpan" class="not-valid"></span><br>
                                 {% endif %}
                                 {{ form2.image.label(for="upload", class="btn btn-secondary", onclick="resetForm()") }}
-                                {{ form2.image(class="form-control-file", id="upload", style="display:none;")}}
+                                {{ form2.image(class="form-control-file", id="upload", style="display:none;") }}
                             </div>
 
                             <div class="modal fade" id="myModal">
