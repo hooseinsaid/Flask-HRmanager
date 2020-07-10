@@ -1,0 +1,10 @@
+Dear {% if user['company_name'] %} {{ user.company_name }}, {% else %} {{ user.employee_name }} {{ user.employee_surname }},
+{% endif %}
+
+Your Company's username is: {{ user.company_username }}
+To be redirected to your the login page tailored specifically for you, click on the following link:
+{{ url_for('login', company_username=user.company_username, _external=True) }}
+
+Sincerely,
+
+The CoolHR Team

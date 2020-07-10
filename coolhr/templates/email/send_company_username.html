@@ -1,0 +1,19 @@
+<p>
+    Dear 
+    {% if user['company_name'] %}
+    {{ user.company_name }},
+    {% else %}
+    {{ user.employee_name }} {{ user.employee_surname }},
+    {% endif %}
+</p>
+<p>
+    Your Company's username is: <em><strong>{{ username }}</strong></em><br>
+    or
+    <a href="{{ url_for('login', company_username=username, _external=True) }}">
+        click here
+    </a> to be redirected to your the login page tailored specifically for you
+</p>
+<p>Alternatively, you can paste the following link in your browser's address bar:</p>
+<p>{{ url_for('login', company_username=username, _external=True) }}</p>
+<p>Sincerely,</p>
+<p>The CoolHR Team</p>
