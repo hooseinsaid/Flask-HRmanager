@@ -73,12 +73,6 @@ class TrainingForm(FlaskForm):
     training_description = TextAreaField('Training Description', validators=[Length(min=0, max=1024)])
     training_submit = SubmitField('Publish Training')
 
-# class EditTrainingForm(FlaskForm):
-#     training_name = StringField('Traning Name', validators=[DataRequired(), Length(min=4, max=64)])
-#     training_description = TextAreaField('Training Description', validators=[Length(min=0, max=1024)])
-#     training_submit = SubmitField('Save Changes')
-
-
 class ResetPasswordnUsernameRequestForm(FlaskForm):
     email = StringField('Email', validators=[DataRequired(), Email()])
     submit = SubmitField('Send Reset Link')
@@ -87,13 +81,6 @@ class ResetPasswordForm(FlaskForm):
     password = PasswordField('Password', validators=[DataRequired()])
     password2 = PasswordField('Repeat Password', validators=[DataRequired(), EqualTo('password', message='passwords must match')])
     submit = SubmitField('Confirm')
-
-# class RecoverCompanyUsernameForm(FlaskForm):
-#     email = StringField('Email', validators=[DataRequired(), Email()])
-#     submit = SubmitField('Continue')
-
-
-#deal with duplications like RecoverCompanyUsernameForm and ResetPasswordRequestForm and EditTrainingForm and TrainingForm
 
 class EmployeeUpdateProfileForm(FlaskForm):
     employee_name = StringField('Name', validators=[Length(min=4, max=64)])
@@ -119,7 +106,6 @@ class EmployeeUpdateProfileForm(FlaskForm):
                 raise ValidationError('Email is already taken. Please choose a different one')
 
 class UploadImageForm(FlaskForm):
-    #validation was taken care of in frontend with javascript. Validation here is redundant
     image = FileField('Upload a photo...', validators=[DataRequired(), FileAllowed(['jpg', 'png'], "We only support JPG or PNG pictures.")])
     upload = SubmitField('Set new profile picture')
 
