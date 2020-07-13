@@ -370,11 +370,13 @@ def training_subscription(company_username):
                 trainings.subscribers.append(employee)
                 db.session.commit()
                 flash("You've been subscribed to {}".format(trainings.training_name))
+                return redirect(url_for('training_subscription', company_username=company_username))
             else:
                 flash("You're already subscribed to {}".format(trainings.training_name))
                 return redirect(url_for('training_subscription', company_username=company_username))
         else:
             flash("This training is no longer available for subscription")
+            return redirect(url_for('training_subscription', company_username=company_username))
     elif request.form.get("unsubscribe"):
         trainings = Trainings.query.filter_by(training_id=request.form.get("unsubscribe"), training_status=True).first()
         if trainings is not None:
@@ -382,11 +384,13 @@ def training_subscription(company_username):
                 trainings.subscribers.remove(employee)
                 db.session.commit()
                 flash("You've been unsubscribed from {}".format(trainings.training_name))
+                return redirect(url_for('training_subscription', company_username=company_username))
             else:
                 flash("You're already unsubscribed from {}".format(trainings.training_name))
                 return redirect(url_for('training_subscription', company_username=company_username))
         else:
             flash("This training has been completed or is no longer available")
+            return redirect(url_for('training_subscription', company_username=company_username))
     return render_template('training_subscribe.html', employee=employee, title="Trainings", training_available=training_available, company_username=company_username)
 
 
@@ -415,6 +419,7 @@ def profile(company_username):
             if (form.employee_name.data == employee.employee_name and form.employee_surname.data == employee.employee_surname and 
                 form.employee_username.data == employee.employee_username and form.employee_email.data == employee.employee_email):
                 flash('Account data has not been changed', 'warning')
+                return redirect(url_for('profile', company_username=company_username))
     elif form2.upload.data:
         if form2.validate_on_submit():
             old_image = employee.employee_image
@@ -422,12 +427,7 @@ def profile(company_username):
             employee.employee_image = image_file
             db.session.commit()
             flash('Image has been uploaded', 'success')
-            return redirect(url_for('profile', company_username=company_username))
-        else:
-            form.employee_name.data = employee.employee_name
-            form.employee_surname.data = employee.employee_surname
-            form.employee_username.data = employee.employee_username
-            form.employee_email.data = employee.employee_email
+        return redirect(url_for('profile', company_username=company_username))
     elif request.method == 'GET':
         form.employee_name.data = employee.employee_name
         form.employee_surname.data = employee.employee_surname
