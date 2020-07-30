@@ -201,15 +201,10 @@ def recover_company_username():
         if company:
             company_username = company.company_username
             send_company_username_email(company, company_username)
-            # flash("Your Company's username is <strong><em>{}</em></strong>".format(company_username), "dark")
-            # return redirect(url_for('login', company_username=company_username, n_email=form.email.data))
         elif employee:
             company_username = Companies.query.filter_by(company_id=employee.company_id).first().company_username
             send_company_username_email(employee, company_username)
         flash("Your Company's username has been sent to your email", 'dark')
-            # company_username = Companies.query.filter_by(company_id=employee.company_id).first().company_username
-            # flash("Your Company's username is <strong><em>{}</em></strong>".format(company_username), "dark")
-            # return redirect(url_for('login', company_username=company_username, n_email=form.email.data))
     return render_template('recover_company_username.html', title='Recover Username', form=form, alert_type='form-alert')
 
 
@@ -341,9 +336,6 @@ def create_projects(company_username):
     pass
 
 
-
-
-
 @app.route('/<company_username>/subscribe-training', methods=['GET', 'POST'])
 @access_employee
 def training_subscription(company_username):
@@ -380,7 +372,6 @@ def training_subscription(company_username):
     return render_template('training_subscribe.html', employee=employee, title="Trainings", training_available=training_available, company_username=company_username)
 
 
-#split to another route for updating and returning jsonify or json.serialze. this place only to render
 @app.route('/<company_username>/profile', methods=['GET', 'POST'])
 @access_employee
 def profile(company_username):
@@ -403,8 +394,7 @@ def profile(company_username):
                 db.session.commit()
                 flash("Your account information has been updated",'success')
                 return redirect(url_for('profile', company_username=company_username))
-            if (form.employee_name.data == employee.employee_name and form.employee_surname.data == employee.employee_surname and 
-                form.employee_username.data == employee.employee_username and form.employee_email.data == employee.employee_email):
+            else:
                 flash('Account data has not been changed', 'warning')
                 return redirect(url_for('profile', company_username=company_username))
     elif form2.upload.data:
@@ -424,14 +414,12 @@ def profile(company_username):
 
 
 def save_images(form_image, imageto_replace):
-
     #delete former image if it exists in the directory and filename is not None from db
     if imageto_replace is not None:
         if imageto_replace != '':
             imageto_replace_path = os.path.join(app.root_path, 'static', 'profile_images', 'avatars', imageto_replace)
             if os.path.exists(imageto_replace_path):
                 os.remove(imageto_replace_path)
-
     #upload new image
     random_hex = secrets.token_hex(8)
     _, f_ext = os.path.splitext(form_image.filename)
@@ -441,6 +429,5 @@ def save_images(form_image, imageto_replace):
     i = Image.open(form_image)
     i.thumbnail(output_size)
     i.save(image_path)
-
     return image_fn
 

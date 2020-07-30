@@ -52,7 +52,7 @@ a.menu {
   font-size: 14px;
 }
 
-.form-control {
+.auth-form .form-control {
   border-radius: 0;
 }
 
