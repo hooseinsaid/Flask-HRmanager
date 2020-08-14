@@ -7,9 +7,8 @@
     {% endif %}
 </p>
 <p>
-    Welcome to CoolHR<br>
     Your Company's username is: <em><strong>{{ username }}</strong></em><br>
-    Keep it safe. You will need it to subsequently log in.<br>
+    or
     <a href="{{ url_for('login', company_username=username, _external=True) }}">
         click here
     </a> to be redirected to your the login page tailored specifically for you

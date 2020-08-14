@@ -2,10 +2,10 @@ import os
 import secrets
 from PIL import Image
 from datetime import datetime
-from flask import render_template, redirect, url_for, request, flash, session
+from flask import render_template, redirect, url_for, request, flash, session, abort
 from coolhr import app, db, mail
 from coolhr.forms import *
-from coolhr.email import send_password_reset_email, send_company_welcome_email
+from coolhr.email import send_welcome_email, send_password_reset_email, send_company_username_email
 from coolhr.models import *
 from functools import wraps
 
@@ -19,7 +19,7 @@ def access_company(function):
         company = Companies.query.filter_by(company_email=session.get('company_email'),
                                             company_username=kwargs['company_username']).first()
         if company is None:
-            return ('Access denied')
+            abort(403)
         return function(*args, **kwargs)
     return wrapper
 
@@ -31,10 +31,10 @@ def access_employee(function):
             return redirect(url_for('company_username'))
         employee = Employees.query.filter_by(employee_email=session.get('employee_email')).first()
         if employee is None:
-            return ('Access denied')
+            abort(403)
         e_company = Companies.query.filter_by(company_id=employee.company_id).first()
         if e_company.company_username != kwargs['company_username']:
-            return ('Access denied')
+            abort(403)
         return function(*args, **kwargs)
     return wrapper
 
@@ -42,6 +42,10 @@ def access_employee(function):
 @app.errorhandler(404)
 def not_found_error(error):
     return render_template('404.html'), 404
+
+@app.errorhandler(403)
+def access_forbidden_error(error):
+    return render_template('403.html'), 403
 
 @app.errorhandler(500)
 def internal_error(error):
@@ -54,8 +58,7 @@ def index():
     if session.get('company_email'):
         return "Your Company is signed in. redirect to company page"
     elif session.get('employee_email'):
-        employee = Employees.query.filter_by(employee_email=session.get('employee_email')).first()
-        company = Companies.query.filter_by(company_id=employee.company_id).first()
+        company = Companies.query.join(Employees, Employees.employee_email==session.get('employee_email')).first()
         return redirect(url_for('profile', company_username=company.company_username))
     return render_template('home.html')
 
@@ -73,14 +76,15 @@ def company_signup():
         company.set_password(form.company_password.data)
         db.session.add(company)
         db.session.commit()
+        send_welcome_email(company, username=company.company_username)
         flash('Your Company has been successfully registered.<br>Login here', 'dark')
-        send_company_welcome_email(company)
         return redirect(url_for('login', company_username=form.company_username.data))
     return render_template('company_signup.html', form=form, alert_type='form-alert')
 
 
 @app.route('/company-username', methods=['GET', 'POST'])
 def company_username():
+    #for this block maybe redirect to login?
     if session.get('company_email'):
         return "Your Company is signed in. redirect to company page"
     elif session.get('employee_email'):
@@ -103,27 +107,18 @@ def login(company_username):
         return redirect(url_for('profile', company_username=company_username))
     form = LoginForm()
     #company2 is to check and make sure that the company found using email is same as the company found using username from the url
-    pre_email = request.args.get('n_email')
-    if pre_email:
-        form.email.data = pre_email
+    # pre_email = request.args.get('n_email')
+    # if pre_email:
+    #     form.email.data = pre_email
     company2 = Companies.query.filter_by(company_username=company_username).first_or_404()
     company = Companies.query.filter_by(company_email=form.email.data, company_id=company2.company_id).first()
     employee = Employees.query.filter_by(employee_email=form.email.data, company_id=company2.company_id).first()
     if form.validate_on_submit():
-        not_valid = 'None'
         if company is not None and company.check_password(form.password.data):
             session['company_email'] = company.company_email
-            #check this code
-            # next_page = request.args.get('next')
-            # if next_page:
-            #     return redirect(next_page)
             return "Here will be company's main page and it will be redirected to"
         elif employee is not None and employee.check_password(form.password.data):
             session['employee_email'] = employee.employee_email
-            #check this code
-            # next_page = request.args.get('next')
-            # if next_page:
-            #     return redirect(next_page)
             return redirect(url_for('profile', company_username=company_username))
         flash('Invalid username or password. Please try again', 'error')
     return render_template('general_login.html', form=form, company_username=company_username, alert_type='form-alert')
@@ -135,7 +130,7 @@ def employeeregister(company_username):
     if session.get('company_email'):
         return "Your Company is signed in. redirect to company page"
     elif session.get('employee_email'):
-        return "Employee is already signed in. redirect to employee page"
+        return redirect(url_for('profile', company_username=company_username))
     company = Companies.query.filter_by(company_username=company_username).first_or_404()
     form = EmployeeRegistrationForm()
     if form.validate_on_submit():
@@ -146,6 +141,7 @@ def employeeregister(company_username):
         db.session.add(employee)
         db.session.commit()
         flash('Employee successfully registered', 'dark')
+        send_welcome_email(employee, username=company.company_username)
         return redirect(url_for('login', company_username=company_username))
     return render_template('employee_signup.html', form=form, company_username=company_username)
 
@@ -161,10 +157,6 @@ def logout():
 
 @app.route('/reset-password-request', methods=['GET', 'POST'])
 def reset_password_request():
-    if session.get('company_email'):
-        return "Your Company is signed in. redirect to company page"
-    elif session.get('employee_email'):
-        return "Employee is already signed in. redirect to employee page"
     form = ResetPasswordnUsernameRequestForm()
     if form.validate_on_submit():
         company = Companies.query.filter_by(company_email=form.email.data).first()
@@ -179,10 +171,6 @@ def reset_password_request():
 
 @app.route('/reset-password/<token>', methods=['GET', 'POST'])
 def reset_password(token):
-    if session.get('company_email'):
-        return "Your Company is signed in. redirect to company page"
-    elif session.get('employee_email'):
-        return "Employee is already signed in. redirect to employee page"
     company = Companies.verify_reset_password_token(token)
     employee = Employees.verify_reset_password_token(token)
     if not (company or employee):
@@ -203,27 +191,20 @@ def reset_password(token):
             return redirect(url_for('login', company_username=e_company.company_username, n_email=employee.employee_email))
     return render_template('reset_password.html', title='Reset Password', form=form, alert_type='form-alert')
 
-
+#use email for this here instead
 @app.route('/recover-company-username', methods=['GET', 'POST'])
 def recover_company_username():
-    if session.get('company_email'):
-        return "Your Company is signed in. redirect to company page"
-    elif session.get('employee_email'):
-        return "Employee is already signed in. redirect to employee page"
     form = ResetPasswordnUsernameRequestForm()
     if form.validate_on_submit():
         company = Companies.query.filter_by(company_email=form.email.data).first()
         employee = Employees.query.filter_by(employee_email=form.email.data).first()
         if company:
             company_username = company.company_username
-            flash("Your Company's username is <strong><em>{}</em></strong>".format(company_username), "dark")
-            return redirect(url_for('login', company_username=company_username, n_email=form.email.data))
+            send_company_username_email(company, company_username)
         elif employee:
             company_username = Companies.query.filter_by(company_id=employee.company_id).first().company_username
-            flash("Your Company's username is <strong><em>{}</em></strong>".format(company_username), "dark")
-            return redirect(url_for('login', company_username=company_username, n_email=form.email.data))
-        else:
-            flash("User not Found. check your email for possible error", "warning")
+            send_company_username_email(employee, company_username)
+        flash("Your Company's username has been sent to your email", 'dark')
     return render_template('recover_company_username.html', title='Recover Username', form=form, alert_type='form-alert')
 
 
@@ -355,9 +336,6 @@ def create_projects(company_username):
     pass
 
 
-
-
-
 @app.route('/<company_username>/subscribe-training', methods=['GET', 'POST'])
 @access_employee
 def training_subscription(company_username):
@@ -370,11 +348,13 @@ def training_subscription(company_username):
                 trainings.subscribers.append(employee)
                 db.session.commit()
                 flash("You've been subscribed to {}".format(trainings.training_name))
+                return redirect(url_for('training_subscription', company_username=company_username))
             else:
                 flash("You're already subscribed to {}".format(trainings.training_name))
                 return redirect(url_for('training_subscription', company_username=company_username))
         else:
             flash("This training is no longer available for subscription")
+            return redirect(url_for('training_subscription', company_username=company_username))
     elif request.form.get("unsubscribe"):
         trainings = Trainings.query.filter_by(training_id=request.form.get("unsubscribe"), training_status=True).first()
         if trainings is not None:
@@ -382,11 +362,13 @@ def training_subscription(company_username):
                 trainings.subscribers.remove(employee)
                 db.session.commit()
                 flash("You've been unsubscribed from {}".format(trainings.training_name))
+                return redirect(url_for('training_subscription', company_username=company_username))
             else:
                 flash("You're already unsubscribed from {}".format(trainings.training_name))
                 return redirect(url_for('training_subscription', company_username=company_username))
         else:
             flash("This training has been completed or is no longer available")
+            return redirect(url_for('training_subscription', company_username=company_username))
     return render_template('training_subscribe.html', employee=employee, title="Trainings", training_available=training_available, company_username=company_username)
 
 
@@ -412,9 +394,9 @@ def profile(company_username):
                 db.session.commit()
                 flash("Your account information has been updated",'success')
                 return redirect(url_for('profile', company_username=company_username))
-            if (form.employee_name.data == employee.employee_name and form.employee_surname.data == employee.employee_surname and 
-                form.employee_username.data == employee.employee_username and form.employee_email.data == employee.employee_email):
+            else:
                 flash('Account data has not been changed', 'warning')
+                return redirect(url_for('profile', company_username=company_username))
     elif form2.upload.data:
         if form2.validate_on_submit():
             old_image = employee.employee_image
@@ -422,12 +404,7 @@ def profile(company_username):
             employee.employee_image = image_file
             db.session.commit()
             flash('Image has been uploaded', 'success')
-            return redirect(url_for('profile', company_username=company_username))
-        else:
-            form.employee_name.data = employee.employee_name
-            form.employee_surname.data = employee.employee_surname
-            form.employee_username.data = employee.employee_username
-            form.employee_email.data = employee.employee_email
+        return redirect(url_for('profile', company_username=company_username))
     elif request.method == 'GET':
         form.employee_name.data = employee.employee_name
         form.employee_surname.data = employee.employee_surname
@@ -437,15 +414,13 @@ def profile(company_username):
 
 
 def save_images(form_image, imageto_replace):
-
-    #delete former image fn if it exists in the directory and filename is not None from db
+    #delete former image if it exists in the directory and filename is not None from db
     if imageto_replace is not None:
         if imageto_replace != '':
             imageto_replace_path = os.path.join(app.root_path, 'static', 'profile_images', 'avatars', imageto_replace)
             if os.path.exists(imageto_replace_path):
                 os.remove(imageto_replace_path)
-
-    #upload new image fn
+    #upload new image
     random_hex = secrets.token_hex(8)
     _, f_ext = os.path.splitext(form_image.filename)
     image_fn = random_hex + f_ext
@@ -454,6 +429,5 @@ def save_images(form_image, imageto_replace):
     i = Image.open(form_image)
     i.thumbnail(output_size)
     i.save(image_path)
-
     return image_fn
 

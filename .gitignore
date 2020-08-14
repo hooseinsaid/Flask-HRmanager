@@ -8,3 +8,7 @@ venv/Lib/__pycache__/_bootlocale.cpython-38.pyc
 coolhr/pyc/database.db
 coolhr/static/profile_images/avatars
 *.pyd
+coolhr/static/profile_images/avatars
+venv
+# coolhr/database.db
+

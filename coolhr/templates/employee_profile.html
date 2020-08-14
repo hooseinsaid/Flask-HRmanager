@@ -6,10 +6,10 @@
             <div class="col-lg-3" style="width: auto;">
                 <div class="form-group">
                     <div class="text-center">
-                        {% if employee.employee_image != "default.png" %}
+                        {% if employee.employee_image == "default.png" or employee.employee_image == none %}
+                        <img class="img-fluid" src="{{ url_for('static', filename='profile_images/default.png') }}" alt="{{ employee.employee_username }}">
+                        {% elif employee.employee_image != "default.png" %}
                         <img class="img-fluid" src="{{ url_for('static', filename='profile_images/avatars/' + employee.employee_image) }}" alt="{{ employee.employee_username }}">
-                        {% elif employee.employee_image == "default.png" %}
-                        <img class="img-fluid" src="{{ url_for('static', filename='profile_images/' + employee.employee_image) }}" alt="{{ employee.employee_username }}">
                         {% endif %}
                     </div>
 
@@ -17,15 +17,9 @@
                         <form id="form2" action="" method="post" enctype="multipart/form-data" novalidate>
                             {{ form.hidden_tag() }}
                             <div class="form-item">
-                                {% if form2.image.errors %}
-                                    {% for error in form2.image.errors %}
-                                        <span class="not-valid">{{ error }}</span><br>
-                                    {% endfor %}
-                                {% else %}
-                                    <span id="mySpan" class="not-valid"></span><br>
-                                {% endif %}
+                                <span id="mySpan" class="not-valid"></span><br>
                                 {{ form2.image.label(for="upload", class="btn btn-secondary", onclick="resetForm()") }}
-                                {{ form2.image(class="form-control-file", id="upload", style="display:none;")}}
+                                {{ form2.image(class="form-control-file", id="upload", style="display:none;") }}
                             </div>
 
                             <div class="modal fade" id="myModal">
@@ -127,7 +121,8 @@
         const validImageTypes = ['image/jpeg', 'image/png'];
         if (this.files[0].size/1024/1024 < 10) {
             if (!validImageTypes.includes(this.files[0]['type'])) {
-                document.getElementById('pictureUpload').click();
+                localStorage.setItem('spanMessage', 'We only support JPG or PNG pictures.');
+                window.location.replace(window.location.href);
             }
             else {
                 document.getElementById('preview').src = window.URL.createObjectURL(this.files[0])
